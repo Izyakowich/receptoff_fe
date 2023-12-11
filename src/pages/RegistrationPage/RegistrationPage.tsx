@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 import Header from 'components/Header';
-import BreadCrumbs from 'components/BreadCrumbs';
-import Image from "react-bootstrap/Image"
+// import BreadCrumbs from 'components/BreadCrumbs';
+// import Image from "react-bootstrap/Image"
 import styles from './RegistrationPage.module.scss'
 
 const MainPage: React.FC = () => {
