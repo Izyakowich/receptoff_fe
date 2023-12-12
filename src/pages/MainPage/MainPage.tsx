@@ -7,8 +7,8 @@ import styles from './MainPage.module.scss'
 import { useEffect, useState } from 'react';
 import { ChangeEvent } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { Link } from 'react-router-dom';
-import SliderFilter from 'components/Slider';
+// import { Link } from 'react-router-dom';
+// import SliderFilter from 'components/Slider';
 import BreadCrumbs from 'components/BreadCrumbs';
 
 import { categories, mockProducts } from '../../../consts';
@@ -40,8 +40,8 @@ const MainPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
     const [titleValue, setTitleValue] = useState<string>('')
-    const [priceValue, setPriceValue] = useState<number>()
-    const [sliderValues, setSliderValues] = useState([0, 1000]);
+    // const [priceValue, setPriceValue] = useState<number>()
+    // const [sliderValues, setSliderValues] = useState([0, 1000]);
     const linksMap = new Map<string, string>([
         ['Продукты', '/']
     ]);
@@ -53,17 +53,18 @@ const MainPage: React.FC = () => {
             if (categoryValue && categoryValue !== 'Все категории') {
                 url += `&category=${categoryValue}`
             }
-            if (priceValue) {
-                url += `&max_price=${priceValue}`
-            }
+            // if (priceValue) {
+            //     url += `&max_price=${priceValue}`
+            // }
         } else if(categoryValue && categoryValue !== 'Все категории') {
             url += `?category=${categoryValue}`
-            if (priceValue) {
-                url += `&max_price=${priceValue}`
-            }
-        } else if (priceValue){
-            url += `?max_price=${priceValue}`
-        }
+            // if (priceValue) {
+            //     url += `&max_price=${priceValue}`
+            // }
+         } 
+        // else if (priceValue){
+        //     url += `?max_price=${priceValue}`
+        // }
         try {
             const response = await fetch(url, {
                 credentials: 'include'
@@ -88,10 +89,11 @@ const MainPage: React.FC = () => {
             } else if (titleValue) {
                 const filteredArray = mockProducts.filter(mockProducts => mockProducts.title.includes(titleValue));
                 setProducts(filteredArray);
-            } else if (priceValue) {
-                const filteredArray = mockProducts.filter(mockProducts => mockProducts.price <= priceValue);
-                setProducts(filteredArray);
             }
+            // } else if (priceValue) {
+            //     const filteredArray = mockProducts.filter(mockProducts => mockProducts.price <= priceValue);
+            //     setProducts(filteredArray);
+            // }
             
             else {
                 setProducts(mockProducts);
@@ -111,13 +113,13 @@ const MainPage: React.FC = () => {
         setTitleValue(event.target.value);
     };
 
-    const handlePriceValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setPriceValue(Number(event.target.value));
-    };
+    // const handlePriceValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //     setPriceValue(Number(event.target.value));
+    // };
 
-    const handleSliderChange = (values: number[]) => {
-        setSliderValues(values);
-    };
+    // const handleSliderChange = (values: number[]) => {
+    //     // setSliderValues(values);
+    // };
 
     const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -175,12 +177,12 @@ const MainPage: React.FC = () => {
                                     ))}
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <SliderFilter
+                            {/* <SliderFilter
                                 onChangeValues={handleSliderChange}
                                 minimum={0}
                                 maximum={1000}
                                 title="Диапазон цен:"
-                            />
+                            /> */}
                         </div>
                         
                     </div>
