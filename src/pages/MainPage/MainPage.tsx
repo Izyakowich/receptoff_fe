@@ -7,8 +7,8 @@ import styles from './MainPage.module.scss'
 import { useEffect, useState } from 'react';
 import { ChangeEvent } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { Link } from 'react-router-dom';
-import SliderFilter from 'components/Slider';
+// import { Link } from 'react-router-dom';
+// import SliderFilter from 'components/Slider';
 import BreadCrumbs from 'components/BreadCrumbs';
 
 import { categories, mockProducts } from '../../../consts';
@@ -18,20 +18,16 @@ export type Product = {
     title: string,
     price: number,
     info: string,
-    src: string,
-    idCategory: number,
-    categoryTitle: string,
-    status: string
+    src: string
 }
 
 export type ReceivedProductData = {
     id: number,
-    title: string,
+    product_name: string,
+    product_info: string,
     price: number,
-    info: string,
-    src: string,
-    id_category: number,
-    category: string,
+    status: string,
+    photo: string,
 }
 
 
@@ -40,58 +36,54 @@ const MainPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
     const [titleValue, setTitleValue] = useState<string>('')
-    const [priceValue, setPriceValue] = useState<number>()
-    const [sliderValues, setSliderValues] = useState([0, 1000]);
+    // const [priceValue, setPriceValue] = useState<number>()
+    // const [sliderValues, setSliderValues] = useState([0, 1000]);
     const linksMap = new Map<string, string>([
         ['Продукты', '/']
     ]);
 
     const fetchProducts = async () => {
-        let url = 'http://127.0.0.1:8000/products'
+        let url = 'http://127.0.0.1:8000/'
         if (titleValue) {
             url += `?title=${titleValue}`
-            if (categoryValue && categoryValue !== 'Все категории') {
-                url += `&category=${categoryValue}`
-            }
-            if (priceValue) {
-                url += `&max_price=${priceValue}`
-            }
-        } else if(categoryValue && categoryValue !== 'Все категории') {
-            url += `?category=${categoryValue}`
-            if (priceValue) {
-                url += `&max_price=${priceValue}`
-            }
-        } else if (priceValue){
-            url += `?max_price=${priceValue}`
+            console.log(titleValue, url)
         }
         try {
             const response = await fetch(url, {
                 credentials: 'include'
             });
+            if (!response.ok) {
+                console.log('Ошибка при получении данных:', response.statusText);
+             } 
+            else { 
             const jsonData = await response.json();
             const newRecipesArr = jsonData.map((raw: ReceivedProductData) => ({
                 id: raw.id,
-                title: raw.title,
+                title: raw.product_name,
+                info: raw.product_info,
                 price: raw.price,
-                info: raw.info,
-                src: raw.src,
-                categoryTitle: raw.category
+                src: raw.photo
+                // status: raw.status
             }));
         
             setProducts(newRecipesArr);
         }
-        catch {
-            console.log('запрос не прошел !')
-            if (categoryValue && categoryValue !== 'Все категории') {
-                const filteredArray = mockProducts.filter(mockProducts => mockProducts.categoryTitle === categoryValue);
-                setProducts(filteredArray);
-            } else if (titleValue) {
+        }
+        catch(error) {
+            console.log('запрос не прошел !', error)
+            // херня в ифах, вдуплить зачем они нужны
+            if (titleValue) {
                 const filteredArray = mockProducts.filter(mockProducts => mockProducts.title.includes(titleValue));
                 setProducts(filteredArray);
-            } else if (priceValue) {
-                const filteredArray = mockProducts.filter(mockProducts => mockProducts.price <= priceValue);
-                setProducts(filteredArray);
             }
+            // } else if (categoryValue && categoryValue !== 'Все категории') {
+            //     const filteredArray = mockProducts.filter(mockProducts => mockProducts.categoryTitle === categoryValue);
+            //     setProducts(filteredArray);
+            // } 
+            // } else if (priceValue) {
+            //     const filteredArray = mockProducts.filter(mockProducts => mockProducts.price <= priceValue);
+            //     setProducts(filteredArray);
+            // }
             
             else {
                 setProducts(mockProducts);
@@ -100,7 +92,7 @@ const MainPage: React.FC = () => {
         
     };
     useEffect(() => {
-        fetchProducts();
+        fetchProducts(); 
     }, []);
 
     const handleSearchButtonClick = () => {
@@ -111,13 +103,13 @@ const MainPage: React.FC = () => {
         setTitleValue(event.target.value);
     };
 
-    const handlePriceValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setPriceValue(Number(event.target.value));
-    };
+    // const handlePriceValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //     setPriceValue(Number(event.target.value));
+    // };
 
-    const handleSliderChange = (values: number[]) => {
-        setSliderValues(values);
-    };
+    // const handleSliderChange = (values: number[]) => {
+    //     setSliderValues(values);
+    // };
 
     const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -175,12 +167,12 @@ const MainPage: React.FC = () => {
                                     ))}
                                 </Dropdown.Menu>
                             </Dropdown>
-                            <SliderFilter
+                            {/* <SliderFilter
                                 onChangeValues={handleSliderChange}
                                 minimum={0}
                                 maximum={1000}
                                 title="Диапазон цен:"
-                            />
+                            /> */}
                         </div>
                         
                     </div>
@@ -190,7 +182,7 @@ const MainPage: React.FC = () => {
 
                 <div className={styles["content__cards"]}>
                     { products.map((product: Product) => (
-                        <OneCard id={product.id} src={product.src} onButtonClick={() => console.log('add to application')} title={product.title} category={product.categoryTitle} price={Number(product.price)}></OneCard>
+                        <OneCard id={product.id} src={product.src} onButtonClick={() => console.log('add to application')} title={product.title} price={Number(product.price)}></OneCard>
                     ))}
                 </div>
             </div>
