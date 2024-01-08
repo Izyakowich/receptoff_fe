@@ -20,7 +20,7 @@ const parseTsConfigPaths = (paths: Record<string, string[]>): Record<string, str
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: "/",
+  base: "IU5_frontend",
   plugins: [react()],
   resolve: {
     alias: parseTsConfigPaths(tsconfig.compilerOptions.paths),
