@@ -1,0 +1,265 @@
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+
+th {
+    background-color: inherit !important;
+    color: #f6881b !important;
+    vertical-align: middle;
+    font-size: 18px;
+    text-align: left;
+}
+
+td {
+    background-color: inherit !important;
+    vertical-align: middle;
+    font-size: 18px;
+    text-align: left;
+}
+
+tr {
+    border: 1px solid #000 !important;
+}
+
+.table {
+    padding: 20px;
+
+    &__container {
+        max-height: 600px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    &__add {
+        font-size: 24px;
+        &-text {
+            margin-right: 15px;
+        }
+    }
+
+    &__head {
+        padding: 20px;
+    }
+
+    &__action {
+        display: flex;
+        height: 100%;
+        gap: 10px;
+        align-items: center;
+        justify-content: flex-start;
+        border: none !important;
+
+        &-btn {
+            width: 120px;
+            font-size: 14px;
+        }
+    }
+}
+
+.modal {
+    &__title {
+        font-size: 24px;
+        color: #f6881b;
+        text-align: center;
+        margin-bottom: 5px;
+    }
+
+    &__subtitle {
+        font-size: 18px;
+        text-align: center;
+        color: #f6881b;
+    }
+
+    &__delete-btns {
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+        gap: 10px;
+    }
+
+    &__btns {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 10px;
+    }
+
+    &__btn {
+        width: 150px;
+        background-color: $brand;
+    }
+
+    &__users {
+        width: 400px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    &__error {
+        color: red;
+        padding-top: 5px;
+        text-align: center;
+    }
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    &__item {
+        width: 350px !important;
+    }
+
+    &__input {
+        height: 50px;
+        border-color: $brand !important;
+        font-size: 18px !important;
+        margin-bottom: 15px;
+    }
+
+    &__textarea {
+        max-height: 150px;
+        min-height: 150px;
+        margin-bottom: 15px;
+    }
+}
+
+.dropdown {
+    width: 350px;
+    margin-bottom: 15px;
+
+    &__wrapper {
+        max-width: 450px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-end;
+    }
+
+    &__btns {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    &__toggle {
+        height: 50px;
+        width: 100%;
+        text-align-last: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 1rem;
+        font-size: 18px;
+
+        &::after {
+            color: transparent;
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:active {
+            box-shadow: none;
+        }
+    }
+
+    &__menu {
+        width: 100%;
+        text-align-last: left;
+        max-height: 100px;
+        overflow: auto;
+        right: 0;
+        left: auto;
+
+        &-item {
+            &:active {
+                background-color: $brand !important;
+            }
+        }
+    }
+
+    &__icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 3%;
+    }
+}
+
+
+.dropzone {
+    &__wrapper {
+        width: 100%;
+        position: relative;
+        margin: 15px 0;
+        text-align: center;
+    }
+
+    &__input {
+        opacity: 0;
+        visibility: hidden;
+        position: absolute;
+    }
+
+    &__btn {
+        width: 100%;
+        text-align: center;
+        height: 40px;
+        background-color: $brand;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: #fff;
+        font-size: 16px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+            -ms-flex-align: center;
+                align-items: center;
+        -webkit-box-pack: start;
+            -ms-flex-pack: start;
+                justify-content: flex-start;
+        border-radius: 3px;
+        cursor: pointer;
+        margin: 0 auto;
+        width: 100%;
+
+        :hover {
+            background-color: $brand !important;
+        }
+
+        &-text {
+            line-height: 1;
+            margin-top: 1px;
+            width: 100%;
+        }
+    }
+
+    &__image {
+        width: 350px;
+        border-radius: 10px;
+        margin-bottom: 50px;
+    }
+
+    &__filename {
+        font-size: 18px;
+        color: #f6881b;
+        margin-bottom: 5px;
+    }
+
+    &__button {
+        background-color: $brand;
+        width: 100%;
+        margin-top: 10px;
+    }
+}

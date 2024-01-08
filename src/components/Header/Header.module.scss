@@ -1,3 +1,6 @@
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+
 .header {
     position: fixed;
     top: 0;
@@ -5,9 +8,7 @@
     width: 100%;
     height: 64px;
     background-color: #fff;
-    color: #3D348B;
-
-
+    color: #f6881b;
 
     &__wrapper {
         font-size: 18px;
@@ -25,21 +26,200 @@
         display: flex;
         gap: 50px;
         margin: 0 auto;
+        color: #f6881b;
     }
 
     &__block {
         text-decoration: none;
-        color: inherit;
+        color: #f6881b;
     }
 
     &__logo {
         font-weight: 700;
         text-decoration: none;
-        color: inherit;
+        color: #f6881b;
+    }
+
+    &__icons {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        color: #f6881b;
     }
 
     &__profile {
         text-decoration: none;
-        color: inherit;
+        color: #f6881b;
+
+        &-icon {
+            cursor: pointer;
+            background-color: red;
+        }
+    }
+}
+
+.burger__icon {
+    display: none;
+}
+
+.cancel__icon {
+    display: none;
+}
+
+.burger__menu {
+    display: none;
+}
+
+.application__icon {
+    &-wrapper {
+        position: relative;
+    }
+    
+    &-circle {
+        position: absolute;
+        top: -7px;
+        left: -7px;
+        background-color: #f6881b;
+        font-size: 13px;
+        color: #fff;
+        display: flex;
+        justify-content: center; /* Выравнивание по горизонтали */
+        align-items: center; 
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+    }
+}
+
+
+
+@include tablet {
+    .header__wrapper {
+      max-width: 1100px;
+    }
+}
+  
+@include largeTablet {
+    .header__wrapper {
+      max-width: 900px;
+    }
+}
+  
+@include mediumTablet {
+    .header__wrapper {
+      max-width: 800px;
+    }
+}
+  
+@include smallTablet {
+    .header__wrapper {
+      max-width: 700px;
+    }
+  
+    .burger__icon {
+      display: inline-block;
+      margin-bottom: 5px;
+    }
+  
+    .cancel__icon {
+      display: inline-block;
+      position: relative;
+      width: 24px;
+      height: 24px;
+      margin-bottom: 5px;
+    }
+  
+    .cancel__icon::before,
+    .cancel__icon::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background-color: $brand-secondary;
+      transform-origin: center;
+    }
+  
+    .cancel__icon::before {
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+  
+    .cancel__icon::after {
+      transform: translate(-50%, -50%) rotate(-45deg);
+    }
+  
+    .header__block {
+      display: none;
+    }
+  
+    .burger__menu {
+      display: block;
+      z-index: 1000;
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 200px;
+      height: auto;
+      background-color: $brand;
+      display: flex;
+      flex-direction: column;
+      box-shadow: $box-shadow;
+      border-radius: $border-radius;
+  
+      &-item {
+        padding: $space-m;
+        text-decoration: none;
+        color: $default-color;
+        cursor: pointer;
+        transition: color .2s ease;
+  
+        &:hover {
+          color: $text-secondary;
+        }
+      }
+    }
+}
+
+@include mobileLandscape {
+    .header__wrapper {
+      max-width: 600px;
+    }
+}
+  
+@include mobile {
+    .header {
+      &__wrapper {
+        max-width: 500px;
+      }
+
+      &__title {
+        font-size: 18px;
+        min-width: 100px;
+      }
+    }
+}
+  
+@include smallMobile {
+    .header__wrapper {
+      max-width: 450px;
+    }
+}
+  
+@include extraSmallMobile {
+    .header__wrapper {
+      max-width: 380px;
+    }
+}
+  
+@include ultraSmallMobile {
+    .header__wrapper {
+      max-width: 330px;
+    }
+}
+  
+@include tinyMobile {
+    .header__wrapper {
+      max-width: 290px;
     }
 }

@@ -1,0 +1,122 @@
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+
+.admin__page {
+    &-wrapper {
+        padding-top: 90px;
+        max-width: 1240px;
+        margin: 0 auto;
+        padding-bottom: 30px;
+    }
+
+    &-title {
+        font-size: 30px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    &-subtitle {
+        font-size: 18px;
+        max-width: 500px;
+        text-align: center;
+        margin: 0 auto;
+        color: gray;
+    }
+}
+
+.form {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 20px;
+    &__item {
+        width: 400px !important;
+    }
+
+    &__input {
+        height: 50px;
+        border-color: $brand !important;
+        font-size: 18px !important;
+        margin-bottom: 15px;
+    }
+
+    &__textarea {
+        max-height: 150px;
+        min-height: 150px;
+        margin-bottom: 15px;
+    }
+
+    &__btn {
+        width: 150px;
+    }
+    margin-bottom: 50px;
+}
+
+.dropdown {
+    width: 400px;
+
+    &__wrapper {
+        max-width: 450px;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-end;
+    }
+
+    &__btns {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 15px;
+        margin-top: 15px;
+    }
+
+    &__toggle {
+        height: 50px;
+        width: 100%;
+        text-align-last: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 1rem;
+        font-size: 18px;
+
+        &::after {
+            color: transparent;
+        }
+
+        &:focus {
+            box-shadow: none;
+        }
+
+        &:active {
+            box-shadow: none;
+        }
+    }
+
+    &__menu {
+        width: 100%;
+        text-align-last: left;
+        max-height: 200px;
+        overflow: auto;
+        right: 0;
+        top: 0;
+
+        &-item {
+            &:active {
+                background-color: $brand !important;
+            }
+        }
+    }
+
+    &__icon {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 3%;
+    }
+}

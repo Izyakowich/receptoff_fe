@@ -1,0 +1,120 @@
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+
+.applications__page {
+    &-wrapper {
+        padding-top: 90px;
+        max-width: 1240px;
+        margin: 0 auto;
+    }
+
+    &-title {
+        font-size: 30px;
+        margin-bottom: 5px;
+        text-align: center;
+    }
+
+    &-subtitle {
+        font-size: 18px;
+        max-width: 60%;
+        text-align: center;
+        margin: 0 auto;
+        color: gray;
+        margin-bottom: 50px;
+    }
+}
+
+.applications__page-subtitle {
+    font-size: 18px;
+        max-width: 60%;
+        text-align: center;
+        margin: 0 auto;
+        color: gray;
+        margin-bottom: 50px;
+}
+
+
+@include tablet {
+    .applications__page-wrapper {
+      max-width: 1100px;
+    }
+}
+  
+@include largeTablet {
+    .applications__page-wrapper {
+      max-width: 900px;
+    }
+}
+  
+@include mediumTablet {
+    .applications__page {
+        &-wrapper {
+            max-width: 800px;
+        }
+
+        &-subtitle {
+            max-width: 100%;
+        }
+    }
+}
+  
+@include smallTablet {
+    .applications__page {
+        &-wrapper {
+            max-width: 700px;
+        }
+
+        &-subtitle {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+@include mobileLandscape {
+    .applications__page {
+        &-wrapper {
+            max-width: 600px;
+        }
+
+        &-title {
+            font-size: 24px;
+        }
+    }
+}
+  
+@include mobile {
+    .applications__page {
+        &-wrapper {
+            max-width: 500px;
+        }
+    }
+}
+  
+@include smallMobile {
+    .applications__page {
+        &-wrapper {
+            max-width: 450px;
+        }
+    }
+}
+  
+@include extraSmallMobile {
+    .applications__page-wrapper {
+      max-width: 380px;
+    }
+}
+  
+@include ultraSmallMobile {
+    .applications__page {
+        &-wrapper {
+            max-width: 330px;
+        }
+    }
+}
+  
+@include tinyMobile {
+    .applications__page-wrapper {
+      max-width: 290px;
+    }
+}

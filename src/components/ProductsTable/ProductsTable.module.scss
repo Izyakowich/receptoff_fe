@@ -1,0 +1,33 @@
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+
+th {
+    background-color: #f6881b !important;
+    color: #fff !important;
+}
+
+td {
+    // background-color: #aaaaaa !important;
+    background-color: #dddce4 !important;
+
+}
+
+.table {
+    width: 100%;
+
+    &__container {
+        max-height: 400px;
+        overflow-y: auto;
+        border-radius: 10px;
+    }
+
+    &__btn:hover {
+        background-color: #f6881b !important;
+    }
+}
+
+@include mediumTablet {
+    .table {
+        min-width: 100%;
+    }
+}

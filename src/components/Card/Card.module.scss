@@ -1,0 +1,51 @@
+@import 'styles/variables.scss';
+@import 'styles/mixins.scss';
+
+.card {
+    &__image {
+        cursor: pointer;
+        width: 100%;
+        &-wrapper {
+            position: relative;
+            overflow: hidden;
+        }
+
+        &-link {
+            display: block;
+            text-decoration: none;
+        }
+    }
+
+    &__info {
+        min-height: 150px;
+    }
+
+    &__button {
+        background-color: #f6881b;
+        padding: 12px 25px;
+        border-color: #000;
+        position: absolute;
+        right: 0;
+        margin-bottom: 50px;
+        font-size: 18px;
+
+        &-wrapper {
+            position: relative;
+            height: 60px;
+        }
+    }
+}
+
+
+
+@include mobile {
+    .card {
+        width: 400px;
+    }
+}
+
+@include extraSmallMobile {
+    .card {
+        width: 100%;
+    }
+}

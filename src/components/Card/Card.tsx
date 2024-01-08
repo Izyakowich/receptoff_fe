@@ -3,6 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image'
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
+import { useIsAuth } from 'Slices/AuthSlice';
+import styles from './Card.module.scss'
 
 export type CardProps = {
   id?: number,
@@ -14,26 +16,27 @@ export type CardProps = {
   onImageClick?: React.MouseEventHandler;
 };
 
-const OneCard: React.FC<CardProps> = ({id, title, category, price, src, onButtonClick, onImageClick }) => {
+const OneCard: React.FC<CardProps> = ({id, title, price, src, onButtonClick, onImageClick }) => {
+  const isUserAuth = useIsAuth();
+
   return (
-    <Card>
-      <Link to={`/product/${id}`} style={{ display: 'block', textDecoration: 'none' }}>
-        <div style={{ position: 'relative', overflow: 'hidden' }}>
+    <Card className={styles.card}>
+      <Link className={styles['card__image-link']} to={`/products/${id}`}>
+        <div className={styles['card__image-wrapper']}>
           <Image
-            style={{ cursor: 'pointer', width: '100%', height: 'auto' }}
+            className={styles.card__image}
             onClick={onImageClick}
             src={src ? src : "https://www.solaredge.com/us/sites/nam/files/Placeholders/Placeholder-4-3.jpg"}
             rounded
           />
         </div>
       </Link>
-      <Card.Body className='d-flex flex-column'>
+      <Card.Body className={`d-flex flex-column ${styles.card__info}`}>
         <Card.Title className='pt-3'>{title}</Card.Title>
-        <Card.Subtitle>Категория: {category}</Card.Subtitle>
         <Card.Text>Цена: {price}р.</Card.Text>
-        <div className='mt-auto w-100' style={{position: 'relative', height: 60}}>
-          <Button style={{ backgroundColor: '#2787F5', padding: '15px 30px', borderColor: "#000", position: 'absolute', right: 0, marginBottom: 50, fontSize: 18 }} onClick={onButtonClick} variant="primary">Добавить</Button>
-        </div>
+        {isUserAuth && <div className={`mt-auto w-100 ${styles['card__button-wrapper']}`}>
+          <Button style={{backgroundColor: '#f6881b', borderColor: '#f6881b'}} className={styles.card__button} onClick={onButtonClick} variant="primary">Добавить</Button>
+        </div>}
       </Card.Body>
     </Card>
   );

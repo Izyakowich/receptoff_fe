@@ -1,22 +1,135 @@
 @import 'styles/variables.scss';
+@import 'styles/mixins.scss';
 
-.content {
-    padding-top: 150px;
-    max-width: 1240px;
-    margin: 0 auto;
+.registration__page {
+    &-wrapper {
+        padding-top: 150px;
+        max-width: 1240px;
+        margin: 0 auto;
+    }
 
-    &__title {
+    &-title {
         font-size: 30px;
         text-align: center;
         margin-bottom: 30px;
     }
 
-    &__link {
+    &-link {
         text-decoration: none;
         margin-top: 10px;
     }
 }
 
-// .form__item {
-//     margin-bottom: 10px;
-// }
+.form {
+    width: 40%;
+    background-color: #fff;
+    padding: 60px 40px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+    border-radius: $border-radius;
+
+    &__item {
+        margin-bottom: 15px;
+
+        &-error {
+            color: red;
+            font-size: 14px;
+        }
+    }
+}
+
+
+
+@include tablet {
+    .registration__page-wrapper {
+      max-width: 1100px;
+    }
+}
+  
+@include largeTablet {
+    .registration__page-wrapper {
+      max-width: 900px;
+    }
+
+    .form {
+        width: 60%;
+    }
+}
+  
+@include mediumTablet {
+    .registration__page {
+        &-wrapper {
+            max-width: 800px;
+        }
+    }
+}
+  
+@include smallTablet {
+    .registration__page {
+        &-wrapper {
+            max-width: 700px;
+        }
+    }
+}
+
+@include mobileLandscape {
+    .registration__page {
+        &-wrapper {
+            max-width: 600px;
+        }
+
+        &-title {
+            font-size: 24px;
+        }
+    }
+
+    .form {
+        width: 100%;
+    }
+}
+  
+@include mobile {
+    .registration__page {
+        &-wrapper {
+            max-width: 500px;
+        }
+    }
+}
+  
+@include smallMobile {
+    .registration__page {
+        &-wrapper {
+            max-width: 450px;
+        }
+    }
+
+    .form {
+        padding: 30px 20px;
+    }
+}
+  
+@include extraSmallMobile {
+    .registration__page-wrapper {
+      max-width: 380px;
+    }
+}
+  
+@include ultraSmallMobile {
+    .registration__page {
+        &-wrapper {
+            max-width: 330px;
+        }
+    }
+}
+  
+@include tinyMobile {
+    .registration__page-wrapper {
+      max-width: 290px;
+    }
+
+    .form {
+        padding: 20px 10px;
+    }
+}
