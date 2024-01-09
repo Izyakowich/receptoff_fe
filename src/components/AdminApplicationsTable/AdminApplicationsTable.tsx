@@ -89,7 +89,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
         method: 'GET',
         withCredentials: true,
       })
-      const newArr = response.data.products.map((raw: ReceivedProductData) => ({
+      const newArr = response.data.product.map((raw: ReceivedProductData) => ({
         id: raw.id,
         title: raw.product_name,
         price: raw.price,
@@ -207,7 +207,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
         {currentProducts.map((product: ProductData, index: number) => (
           <div className={styles['modal__list-item']}>
             <div className={styles['modal__list-item-title']}>
-              {product.title} "{product.title}"
+              <b>{product.title}</b>
             </div>
             <b>{product.price} ₽</b>
           </div>

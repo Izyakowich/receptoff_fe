@@ -35,7 +35,7 @@ const OneCard: React.FC<CardProps> = ({id, title, price, src, onButtonClick, onI
         <Card.Title className='pt-3'>{title}</Card.Title>
         <Card.Text>Цена: {price}р.</Card.Text>
         {isUserAuth && <div className={`mt-auto w-100 ${styles['card__button-wrapper']}`}>
-          <Button style={{backgroundColor: '#f6881b', borderColor: '#f6881b'}} className={styles.card__button} onClick={onButtonClick} variant="primary">Добавить</Button>
+          <Button style={{backgroundColor: '#f6881b', borderColor: '#f6881b'}} className={styles.card__button} onClick={onButtonClick} variant="primary">В корзину</Button>
         </div>}
       </Card.Body>
     </Card>

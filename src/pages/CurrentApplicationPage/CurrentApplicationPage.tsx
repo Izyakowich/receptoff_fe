@@ -87,7 +87,7 @@ const CurrentApplicationPage = () => {
         {products.length !== 0 ? <div>
           
           <div className={styles['application__page-info']}>
-            <h3 className={styles['application__page-info-title']}>Дата создания заявки: <br/><b>{applicationDate}</b></h3>
+            {/* <h3 className={styles['application__page-info-title']}>Дата создания заявки: <br/><b>{applicationDate}</b></h3> */}
             <h3 className={styles['application__page-info-title']}>Добавленные блюда:</h3>
             <ProductsTable products={products} className={styles['application__page-info-table']}/>
 

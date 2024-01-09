@@ -31,7 +31,7 @@ const SelectedApplicationPage = () => {
             withCredentials: true,
           })
 
-          const newArr = response.data.products.map((raw: ReceivedProductData) => ({
+          const newArr = response.data.product.map((raw: ReceivedProductData) => ({
             id: raw.id,
             title: raw.product_name,
             price: raw.price,
@@ -60,7 +60,6 @@ const SelectedApplicationPage = () => {
                 <h1 className={styles['application__page-title']}>
                     Добавленные блюда
                 </h1>
-                
                 <ProductsTable flag={true} products={currentProduct} className={styles['application__page-table']}/>
             </div>
         </div>
