@@ -18,6 +18,10 @@ interface DataState {
   titleValue: string;
   products: ProductData[];
   priceValues: number[];
+  isMainPage: boolean;
+  // emailValue: string;
+  isProductsLoading: boolean;
+
 }
 
 const dataSlice = createSlice({
@@ -25,7 +29,11 @@ const dataSlice = createSlice({
   initialState: {
     titleValue: '',
     products: [],
-    priceValues: [0, 10000]
+    priceValues: [0, 10000],
+    isMainPage: false,
+    isProductsLoading: false,
+    // emailValue: ''
+
   } as DataState,
   reducers: {
     // setCategories(state, action: PayloadAction<CategoryData[]>) {
@@ -43,7 +51,17 @@ const dataSlice = createSlice({
     },
     setPriceValues(state, action: PayloadAction<number[]>) {
       state.priceValues = action.payload
-    }
+    },
+    setIsMainPage(state, action: PayloadAction<boolean>) {
+      state.isMainPage = action.payload
+      console.log('edit', action.payload)
+    },
+    setIsProductsLoading(state, action: PayloadAction<boolean>) {
+      state.isProductsLoading = action.payload
+    },
+    // setEmailValue(state, action: PayloadAction<string>) {
+    //   state.emailValue = action.payload
+    // }
   },
 });
 
@@ -61,13 +79,27 @@ export const useProducts = () =>
 export const usePriceValues = () =>
   useSelector((state: { mainData: DataState }) => state.mainData.priceValues);
 
+export const useIsMainPage = () =>
+  useSelector((state: { mainData: DataState }) => state.mainData.isMainPage);
+
+export const useIsProductsLoading = () =>
+  useSelector((state: { mainData: DataState }) => state.mainData.isProductsLoading);
+
+// export const useEmailValue = () =>
+//   useSelector((state: { mainData: DataState }) => state.mainData.emailValue);
+
+
 // Action, который будем применять в различных обработках
 export const {
     // setCategories: setCategoriesAction,
     // setCategoryValue: setCategoryValueAction,
     setTitleValue: setTitleValueAction,
+    // setEmailValue: setEmailValueAction,
     setProducts: setProductsAction,
-    setPriceValues: setPriceValuesAction
+    setPriceValues: setPriceValuesAction,
+    setIsMainPage: setIsMainPageAction,
+    setIsProductsLoading: setIsProductsLoadingAction,
+
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

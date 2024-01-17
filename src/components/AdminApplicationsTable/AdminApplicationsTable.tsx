@@ -23,6 +23,7 @@ interface ApplicationData {
   publicationDate: string;
   approvingDate: string;
   readyStatus: boolean;
+  userEmail: string;
 }
 
 interface ProductData {
@@ -53,6 +54,7 @@ export type ReceivedApplicationData = {
   publication_date: string;
   approving_date: string;
   ready_status: boolean;
+  user_email: string;
 }
 
 const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
@@ -75,7 +77,8 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
         creationDate: raw.creation_date,
         publicationDate: raw.publication_date,
         approvingDate: raw.approving_date,
-        readyStatus: raw.ready_status
+        readyStatus: raw.ready_status,
+        userEmail: raw.user_email
     }));
     dispatch(setApplicationsAction(newArr))
     } catch(error) {
@@ -85,7 +88,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
 
   const getCurrentApplication = async (id: number) => {
     try {
-      const response = await axios(`http://localhost:8000/applications/${id}`, {
+      const response = await axios(`http://localhost:8000/applications/${id}/`, {
         method: 'GET',
         withCredentials: true,
       })
@@ -107,23 +110,23 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
   const putApplication = async (id: number, isAccepted: boolean) => {
     try {
       if (isAccepted) {
-        await axios(`http://localhost:8000/applications/${id}/adminput`, {
+        await axios(`http://localhost:8000/applications/${id}/adminput/`, {
           method: 'PUT',
           data: {
             status: "Принято"
           },
           withCredentials: true
         })
-        toast.success('Заявка успешно принята!')
+        toast.success('Заявка принята!')
       } else {
-        await axios(`http://localhost:8000/applications/${id}/adminput`, {
+        await axios(`http://localhost:8000/applications/${id}/adminput/`, {
           method: 'PUT',
           data: {
             status: "Отказано"
           },
           withCredentials: true
         })
-        toast.success('Заявка успешно отклонена!')
+        toast.success('Заявка отклонена!')
       }
 
       const updatedApplications = applications.map(application => {
@@ -168,6 +171,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
           <tr className={styles.tableHead}>
             <th>№</th>
             <th>Статус</th>
+            <th>Заказчик</th>
             <th>Дата создания</th>
             <th>Дата формирования</th>
             <th>Дата завершения</th>
@@ -181,6 +185,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
               {application.status !== 'Зарегистрирован' && <>
               <td>{++index}</td>
               <td>{application.status}</td>
+              <td>{application.userEmail}</td>
               <td>{application.creationDate}</td>
               <td>{application.publicationDate ? application.publicationDate : '-'}</td>
               <td>{application.approvingDate ? application.approvingDate : '-'}</td>

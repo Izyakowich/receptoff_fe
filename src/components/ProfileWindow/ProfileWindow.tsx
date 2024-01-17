@@ -23,27 +23,27 @@ const ProfileWindow: React.FC<ModalProps> = ({
 }) => {
     return (
         <div className={cn(styles.modal, className)}>
-            <div className={styles.title__block}>
+            {/* <div className={styles.title__block}>
             <ProfileLogoIcon></ProfileLogoIcon>
-                <h3 className={styles.modal__title}>Ваш профиль</h3>
-            </div>
+                <h3 className={styles.modal__title}>Вы</h3>
+            </div> */}
             
-            <div className={styles.info}>
+            {/* <div className={styles.info}>
                 <div className={styles.username__info}>
                     <div>
                         <h4 className={styles.info__title}>E-mail: </h4>
                         <h5 className={styles.info__value}>{email}</h5>
                     </div>
-                    {/* <div>
+                    <div>
                         <h4 className={styles.info__title}>ФИО: </h4>
                         <h5 className={styles.info__value}>{fullname}</h5>
                     </div>
                     <div>
                         <h4 className={styles.info__title}>Номер телефона: </h4>
                         <h5 className={styles.info__value}>{phoneNumber}</h5>
-                    </div> */}
+                    </div>
                 </div>
-            </div>
+            </div> */}
             <Button style={{backgroundColor: '#f6881b', borderColor: '#f6881b'}} className={styles.modal__btn} onClick={onClick}>Выйти</Button>
             
         </div>

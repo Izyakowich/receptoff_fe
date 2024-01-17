@@ -30,7 +30,7 @@ const DetailedPage: React.FC = () => {
 
     const getProduct = async () => {
         try {
-            const response = await axios.get(`http://127.0.0.1:8000/products/${id}`);
+            const response = await axios.get(`http://127.0.0.1:8000/products/${id}/`);
             const jsonData = response.data;
             dispatch(setProductAction({
                 id: Number(jsonData.id),
@@ -41,7 +41,7 @@ const DetailedPage: React.FC = () => {
             }))
 
             const newLinksMap = new Map<string, string>(linksMap); // Копирование старого Map
-            newLinksMap.set(jsonData.title, '/products/' + id);
+            newLinksMap.set(jsonData.title, '/products/' + id + '/');
             dispatch(setLinksMapDataAction(newLinksMap))
         } catch {
             const sub = mockProducts.find(item => item.id === Number(id));
@@ -62,7 +62,8 @@ const DetailedPage: React.FC = () => {
         <div className='detailed__page'>
             <Header/>
             <div className={styles['detailed__page-wrapper']} style={{paddingTop: "90px"}}>
-                <BreadCrumbs links={linksMap}/>
+                <BreadCrumbs links={linksMap}></BreadCrumbs>
+                
                 <div className={styles['detailed__page-container']}>
                     <Image
                         className={styles['detailed__page-image']}

@@ -53,7 +53,7 @@
 
         &-icon {
             cursor: pointer;
-            background-color: red;
+            background-color: white;
         }
     }
 }
@@ -75,20 +75,20 @@
         position: relative;
     }
     
-    &-circle {
-        position: absolute;
-        top: -7px;
-        left: -7px;
-        background-color: #f6881b;
-        font-size: 13px;
-        color: #fff;
-        display: flex;
-        justify-content: center; /* Выравнивание по горизонтали */
-        align-items: center; 
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-    }
+    // &-circle {
+    //     position: absolute;
+    //     top: -7px;
+    //     left: -7px;
+    //     background-color: #f6881b;
+    //     font-size: 13px;
+    //     color: #fff;
+    //     display: flex;
+    //     justify-content: center; /* Выравнивание по горизонтали */
+    //     align-items: center; 
+    //     width: 20px;
+    //     height: 20px;
+    //     border-radius: 50%;
+    // }
 }
 
 

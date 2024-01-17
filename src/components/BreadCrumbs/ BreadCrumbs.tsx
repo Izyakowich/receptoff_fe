@@ -19,7 +19,7 @@ const BreadCrumbs: React.FC<BreadCrumbsProps> = ({links}) => {
           {key}
         </Link>
         {index !== links.size - 1 && 
-        <span className={styles['breadcrumbs__item-icon']}><ArrowIcon /></span>}
+        <span className={styles['breadcrumbs__item-icon']}>/</span>}
       </span>
     ))}
   </div>
@@ -27,3 +27,42 @@ const BreadCrumbs: React.FC<BreadCrumbsProps> = ({links}) => {
 }
 
 export default  BreadCrumbs
+
+
+// const BreadCrumbs = () => {
+//   const location = useLocation()
+
+//   let currentLink = ""
+
+//   const crumbs = location.pathname
+//     .split("/")
+//     .filter((crumb) => crumb !== "")
+//     .map((crumb) => {
+//       currentLink += `/${crumb}`
+
+//       if (crumb == "history") crumb = "История"
+//       if (crumb == "planesDevelopment_frontend") crumb = "Услуги"
+//       if (crumb == "cart") crumb = "Корзина"
+//       if (crumb == "auth") crumb = "Авторизация"
+//       if (crumb == "registration") crumb = "Регистрация"
+//       if (crumb == "application") crumb = "Заказ"
+//       if (crumb == "options-list") crumb = "Список опций"
+
+//       return (
+//         <div className={styles.crumb} key={crumb}>
+//           <Link to={currentLink}>{crumb}</Link>
+//         </div>
+//       )
+//     })
+
+//   return (
+//     <div className={styles.breadcrumbs}>
+//       <div className={styles.crumb}>
+//         <Link to={"/"}>Главная</Link>
+//       </div>
+//       {crumbs}
+//     </div>
+//   )
+// }
+
+// export default BreadCrumbs

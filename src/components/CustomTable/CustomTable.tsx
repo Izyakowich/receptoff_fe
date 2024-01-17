@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent } from 'react'
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 // import cn from 'classnames';
 import styles from './CustomTable.module.scss'
@@ -16,6 +17,7 @@ import { useTitleValue, useProducts, usePriceValues,
    setTitleValueAction, setProductsAction, setPriceValuesAction} from "../../Slices/MainSlice";
 import { useDispatch } from 'react-redux';
 import ImageIcon from 'components/Icons/ImageIcon';
+import { useNavigate } from 'react-router-dom';
 
 export type ReceivedProductData = {
   id: number,
@@ -54,9 +56,10 @@ export type ProductData =  {
 const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
   const products = useProducts()
   const dispatch = useDispatch()
+  const navigate = useNavigate();
 
   const [isAddModalWindowOpened, setIsAddModalWindowOpened] = useState(false)
-  const [isEditModalWindowOpened, setIsEditModalWindowOpened] = useState(false)
+  // const [isEditModalWindowOpened, setIsEditModalWindowOpened] = useState(false)
   const [isDeleteModalWindowOpened, setIsDeleteModalWindowOpened] = useState(false)
   const [isImageModalWindowOpened, setIsImageModalWindowOpened] = useState(false)
 
@@ -69,68 +72,67 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
 
   const [isValid, setIsValid] = useState(false)
 
-  const postProduct = async () => {
-    try {
-      const response = await axios(`http://localhost:8000/products/post`, {
-        method: 'POST',
-        data: {
-          title: productTitleValue,
-          price: Number(productPriceValue),
-          info: productInfoValue
-        },
-        withCredentials: true
-      })
-      setIsAddModalWindowOpened(false)
-      // очень странная штука
-      dispatch(setProductsAction([...products, {
-        id: response.data.id,
-        title:  response.data.title,
-        price:  response.data.price,
-        info: response.data.info,
-        src: ''
-      }]))
-      toast.success('Блюдо успешно добавлено!')
-    } catch(e) {
-      toast.error('Блюдо уже существует!')
-    }
-  }
+  // const postProduct = async () => {
+  //   try {
+  //     const response = await axios(`http://localhost:8000/products/post/`, {
+  //       method: 'POST',
+  //       data: {
+  //         product_name: productTitleValue,
+  //         price: Number(productPriceValue),
+  //         info: productInfoValue
+  //       },
+  //       withCredentials: true
+  //     })
+  //     setIsAddModalWindowOpened(false)
+  //     dispatch(setProductsAction([...products, {
+  //       id: response.data.id,
+  //       title:  response.data.product_name,
+  //       price:  response.data.price,
+  //       info: response.data.info,
+  //       src: ''
+  //     }]))
+  //     toast.success('Вы добавили новое блюдо!')
+  //   } catch(e) {
+  //     toast.error('Блюдо уже существует!')
+  //   }
+  // }
 
-  const putProduct = async (id: number) => {
-    try {
-      const response = await axios(`http://localhost:8000/products/${id}/put`, {
-        method: 'PUT',
-        data: {
-          title: productInfoValue,
-          price: Number(productPriceValue),
-          info: productInfoValue,
-          status: "enabled"
-        },
-        withCredentials: true
-      })
-      setIsEditModalWindowOpened(false)
-      const updatedProducts = products.map(product => {
-        if (product.id === id) {
-          return {
-            ...product,
-            title: response.data.title,
-            price: response.data.price,
-            info: response.data.info,
-            src: response.data.src
-          };
-        }
-        return product;
-      });
+  // const putProduct = async (id: number) => {
+  //   try {
+  //     const response = await axios(`http://localhost:8000/products/${id}/put/`, {
+  //       method: 'PUT',
+  //       data: {
+  //         title: productInfoValue,
+  //         price: Number(productPriceValue),
+  //         info: productInfoValue,
+  //         status: "enabled"
+  //       },
+  //       withCredentials: true
+  //     })
+  //     setIsEditModalWindowOpened(false)
+  //     const updatedProducts = products.map(product => {
+  //       if (product.id === id) {
+  //         return {
+  //           ...product,
+  //           title: response.data.title,
+  //           price: response.data.price,
+  //           info: response.data.info,
+  //           src: response.data.src
+  //         };
+  //       }
+  //       return product;
+  //     });
 
-      dispatch(setProductsAction(updatedProducts))
-      toast.success('Информация успешно обновлена!')
-    } catch(e) {
-      toast.error('Абонемент с таким названием уже существует!')
-    }
-  }
+  //     dispatch(setProductsAction(updatedProducts))
+  //     toast.success('Информация обновлена!')
+  //   } catch(e) {
+  //     toast.error('Блюдо с таким названием уже существует!')
+  //   }
+  // }
   
   const deleteProduct = async () => {
     try {
-      await axios(`http://localhost:8000/products/${currentProductId}/delete`, {
+      await axios(`http://localhost:8000/products/${currentProductId}/delete/`, {
         method: 'DELETE',
         withCredentials: true,
 
@@ -140,7 +142,7 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
         return product.id !== currentProductId 
       })))
       setIsDeleteModalWindowOpened(false)
-      toast.success('Абонемент успешно удален!')
+      toast.success('Блюдо удалено!')
     } catch(e) {
       throw e
     }
@@ -153,7 +155,7 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
         formData.append('file', selectedImage);
 
         const response = await axios.post(
-          `http://localhost:8000/products/${currentProductId}/image/post`,
+          `http://localhost:8000/products/${currentProductId}/image/post/`,
           formData,
           {
             headers: {
@@ -174,7 +176,7 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
         dispatch(setProductsAction(updatedProducts))
         console.log(updatedProducts)
         setSelectedImage(null)
-        toast.success('Изображение успешно загружено')
+        toast.success('Изображение загружено')
 
       } catch (error) {
         console.error('Error uploading image:', error);
@@ -184,21 +186,27 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
     }
   };
 
-  const handleProductFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    if (isAddModalWindowOpened) {
-      postProduct()
-    } else if(currentProductId) {
-      putProduct(currentProductId)
-    }
+  // const handleProductFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault()
+  //   if (isAddModalWindowOpened) {
+  //     postProduct()
+  //   } else if(currentProductId) {
+  //     putProduct(currentProductId)
+  //   }
+  // }
+
+  const handleAddButtonClick = () => {
+    navigate('/admin/add/')
   }
 
   const handleEditButtonClick = (product: ProductData) => {
     setCurrentProductId(product.id)
-    setIsEditModalWindowOpened(true);
+    // setIsEditModalWindowOpened(true);
     setProductTitleValue(product.title)
     setProductPriceValue((product.price.toString()))
     setProductInfoValue(product.info)
+    navigate(`/admin/edit/${product.id}`)
+    // history('/CurrentApplicationPage');
   }
 
   const handleDeleteButtonClick = (id: number) => {
@@ -212,15 +220,6 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
     setCurrentImage(product.src)
   }
 
-  // const handleCategorySelect = (eventKey: string | null) => {
-  //   if (eventKey !== null) {
-  //     const selectedCategory = categories.find(category => category.id === parseInt(eventKey, 10));
-  //     if (selectedCategory && selectedCategory.id !== categoryValue?.id && selectedCategory) {
-  //       setCategoryValue(selectedCategory)
-  //     }
-  //   }
-  // };
-
   const handleImageChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -230,9 +229,9 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
 
   return (
     <>
+      <span className={`${styles['table__add-text']}`}>Добавление новой услуги</span><AddButton onClick={() => handleAddButtonClick()}/>
       <div className={`${styles.table__container} ${className}`}>
       <div className={`${styles.table__add} ${className}`}>
-      <span className={`${styles['table__add-text']}`}>Хотите добавить новое блюдо?</span><AddButton onClick={() => setIsAddModalWindowOpened(true)}/>
       </div>
       <Table>
           <thead>
@@ -259,32 +258,40 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
           </tbody>
         </Table>
 
-        <ModalWindow handleBackdropClick={() => {setIsAddModalWindowOpened(false); setIsEditModalWindowOpened(false); productTitleValue && setProductTitleValue(''); productPriceValue && setProductPriceValue(''); productInfoValue && setProductInfoValue('')}}
+      {/* <div className={`${styles.table__add} ${className}`}>
+      <span className={`${styles['table__add-text']}`}>Добавить блюдо</span><AddButton onClick={() => setIsAddModalWindowOpened(true)}/>
+      </div>
+      <Table>
+          <thead>
+            <tr>
+              {columns.map((column, index) => (
+                <th key={index}>{column.title}</th>
+              ))}
+              {<th>Действия</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {columns.map((column, columnIndex) => (
+                  <td key={columnIndex}>{row[column.key]}</td>
+                ))}
+                <td className={styles.table__action}>
+                  <EditIcon onClick={() => handleEditButtonClick(row)}/>
+                  <ImageIcon onClick={() => handleImageButtonClick(row)}/>
+                  <BasketIcon onClick={() => handleDeleteButtonClick(row.id)}/>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table> */}
+
+        {/* <ModalWindow handleBackdropClick={() => {setIsAddModalWindowOpened(false); setIsEditModalWindowOpened(false); productTitleValue && setProductTitleValue(''); productPriceValue && setProductPriceValue(''); productInfoValue && setProductInfoValue('')}}
         className={styles.modal} active={isAddModalWindowOpened || isEditModalWindowOpened}>
           <h3 style={{color: '#f6881b'}}className={styles.modal__title}>Заполните данные</h3>
           <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => handleProductFormSubmit(event)}
           className={styles['form']}>
-            {/* <Dropdown className={styles['dropdown']} onSelect={handleCategorySelect}>
-              <Dropdown.Toggle
-                  className={styles['dropdown__toggle']}
-                  style={{
-                      borderColor: '#2787F5',
-                      backgroundColor: "#fff",
-                      color: '#000',
-                  }}
-              >   
-                {categoryValue?.title}
-                <ArrowDownIcon className={styles.dropdown__icon}/>
-              </Dropdown.Toggle>
-              <Dropdown.Menu className={styles['dropdown__menu']}>
-                {categories
-                  .map(category => (
-                    category.title !== 'Все категории' && <Dropdown.Item className={styles['dropdown__menu-item']} key={category.id} eventKey={category.id}>
-                      {category.title}
-                    </Dropdown.Item>
-                  ))}
-                </Dropdown.Menu>
-             </Dropdown> */}
+            
             <div className={styles.form__item}>
               <Form.Control onChange={(event: ChangeEvent<HTMLInputElement>) => {setProductTitleValue(event.target.value)}} value={productTitleValue} className={styles.form__input} type="text" placeholder="Название блюда*" />
             </div>
@@ -303,13 +310,13 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
             </div>
             <Button style={{backgroundColor: '#f6881b'}} disabled={productTitleValue && productPriceValue && productInfoValue && isValid ? false : true} type='submit'>Сохранить</Button>
           </Form>
-        </ModalWindow>
+        </ModalWindow> */}
 
         <ModalWindow handleBackdropClick={() => setIsDeleteModalWindowOpened(false)} active={isDeleteModalWindowOpened} className={styles.modal}>
           <h3 className={styles.modal__title}>Вы уверены, что хотите удалить?</h3>
           <div className={styles['modal__delete-btns']}>
-            <Button onClick={() => {deleteProduct()}} className={styles.modal__btn}>Подтвердить</Button>
-            <Button onClick={() => setIsDeleteModalWindowOpened(false)} className={styles.modal__btn}>Закрыть</Button>
+            <Button onClick={() => {deleteProduct()}} className={styles.modal__btn}>Удалить</Button>
+            <Button onClick={() => setIsDeleteModalWindowOpened(false)} className={styles.modal__btn}>Отмена</Button>
           </div>
         </ModalWindow>
 

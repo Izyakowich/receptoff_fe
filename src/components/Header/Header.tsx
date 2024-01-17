@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom'
+import { Link, Route, useLocation, useNavigate, Routes } from 'react-router-dom'
 import styles from './Header.module.scss'
 import ProfileIcon from 'components/Icons/ProfileIcon';
 import ApplicationIcon from 'components/Icons/ApplicationIcon';
@@ -13,6 +13,11 @@ import {useUser, useIsAuth, setIsAuthAction, setUserAction} from "../../Slices/A
 import Cookies from "universal-cookie";
 import { toast } from 'react-toastify';
 import { useApplications, useProductsFromApplication } from 'Slices/ApplicationsSlice';
+import { Button } from 'react-bootstrap';
+import { useIsMainPage } from 'Slices/MainSlice';
+import BasketIcon from 'components/Icons/BasketIcon';
+import ProductsPage from 'pages/ProductsPage';
+import AdminProductsPage from 'pages/AdminProductsPage';
 
 const cookies = new Cookies();
 
@@ -22,9 +27,11 @@ const Header: React.FC = () => {
     const [isProfileButtonClicked, setIsProfileButtonClicked] = useState(false);
     const [isBurgerMenuOpened, setIsBurgerMenuOpened] = useState(false)
     const isUserAuth = useIsAuth();
+    const navigate = useNavigate();
     const productsFromApplications = useProductsFromApplication();
     const applications = useApplications();
     let user = useUser();
+    const isMainPage = useIsMainPage();
 
     const handleProfileButtonClick = () => {
         setIsProfileButtonClicked(!isProfileButtonClicked);
@@ -52,7 +59,7 @@ const Header: React.FC = () => {
                 isSuperuser: false
             }))
             setIsProfileButtonClicked(false);
-            toast.success("Выход выполнен  успешно");
+            toast.success("Вы вышли из аккаунта");
         }
         catch(error) {
             console.log(error)
@@ -69,64 +76,38 @@ const Header: React.FC = () => {
                 <div className={styles.header__logo}>РЕЦЕПТOFF</div>
 
                 <div className={styles.header__blocks}>
-                    <Link className={styles.header__block} to='/products'>Все блюда</Link>
-                    {isUserAuth && user.isSuperuser && <Link className={styles.header__block} to={'/admin'}>Управление</Link>}
-
+                    <Link className={styles.header__block} to='/products/'>Все блюда</Link>
+                    {isUserAuth && user.isSuperuser && <Link className={styles.header__block} to={'/products/admin/'}>Управление</Link>}
                     {isUserAuth && !user.isSuperuser ? 
-                    <Link className={styles.header__block} to='/applications'>Мои заявки</Link>
-                    : isUserAuth && <Link className={styles.header__block} to='/applications'>Заявки</Link>}
+                    <Link className={styles.header__block} to='/applications/'>Мои заявки</Link>
+                    : isUserAuth && <Link className={styles.header__block} to='/applications/'>Заявки</Link>}
                     {/* {!user.isSuperuser &&  <Link className={styles.header__block} to='/'>Поддержка</Link>} */}
                 </div>
 
                 <div className={styles.header__icons}>
-                    {isUserAuth && !user.isSuperuser &&
-                        <div className={styles['application__icon-wrapper']}>
-                            {/* <Link to={'/application'}> //проверить урл
-                                <div className={styles['application__icon-circle']}>{productsFromApplications.length}</div>
-                                <ApplicationIcon/>
-                            </Link> */}
-
-                        <Link to={'/application'} style={{pointerEvents: productsFromApplications.length === 0 ? 'none' : 'auto'}}>
-                        <div className={`${styles['application__icon-circle']} ${productsFromApplications.length === 0 ? styles['disabled'] : ''}`}>
-                            {productsFromApplications.length}
-                            </div>
-                        <ApplicationIcon/>
-                       </Link>
-                    </div>
+                    {isUserAuth ?
+                    <div>email: {user.email} </div> : ""
                     }
-            
-                    {isUserAuth ? <ProfileIcon className={styles['header__profile-icon']} onClick={handleProfileButtonClick}/> : <Link to='/login' className={styles.header__profile}><ProfileIcon/></Link>}
+                    
+                    {/* {isUserAuth ? <Link to='/logout'>Выйти</Link> : <Link to='/login' className={styles.header__profile}>Войти</Link>} */}
+
+                    {isUserAuth ? <span className={styles['header__profile-icon']} onClick={logout}>Выйти</span> : <Link to='/login/' className={styles.header__profile}>Войти</Link>}
                     {isBurgerMenuOpened === false
                         ? <BurgerIcon className={styles.burger__icon} color='accent' onClick={() => setIsBurgerMenuOpened(true)} />
                         : <div className={styles.cancel__icon} onClick={() => setIsBurgerMenuOpened(false)}></div>}
-                    {isBurgerMenuOpened &&
+                    {isBurgerMenuOpened && !user.isSuperuser &&
                     <div className={styles.burger__menu}>
-                        <Link className={styles['burger__menu-item']} to={'/products'}>Блюда</Link>
-                        <Link className={styles['burger__menu-item']} to={`/applications`}>Мои заявки</Link>
+                        <Link className={styles['burger__menu-item']} to={'/products/'}>Блюда</Link>
+                        <Link className={styles['burger__menu-item']} to={'/applications/'}>Мои заявки</Link>
                     </div>}
+                    {isBurgerMenuOpened && user.isSuperuser &&
+                    <div className={styles.burger__menu}>
+                        <Link className={styles['burger__menu-item']} to={'/products/'}>Все блюда</Link>
+                        <Link className={styles['burger__menu-item']} to={'/admin/'}>Управление</Link>
+                        <Link className={styles['burger__menu-item']} to={'/applications/'}>Заявки</Link>
+                    </div>
+                    }
                 </div>
-
-                <AnimatePresence>
-                {isUserAuth && isProfileButtonClicked && (
-                    <motion.div
-                    initial={{ opacity: 0, y: -50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -50 }}
-                    transition={{ duration: 0.3 }}
-                    style={{
-                        marginTop: 400,
-                        position: "absolute",
-                        right: 0,
-                    }}
-                    >
-                    <ProfileWindow
-                        email={user.email}
-                        // fullname={user.fullname}
-                        onClick={handleSubmit}
-                    />
-                    </motion.div>
-                )}
-                </AnimatePresence>
             </div>
         </div>
     )

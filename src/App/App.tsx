@@ -13,7 +13,7 @@ import axios, {AxiosResponse} from 'axios';
 import Cookies from "universal-cookie";
 import {useDispatch} from "react-redux";
 import {setUserAction, setIsAuthAction, useIsAuth, useUser} from "../Slices/AuthSlice";
-import { setProductsAction} from "Slices/MainSlice";
+import { useIsProductsLoading, setProductsAction, setIsProductsLoadingAction} from "Slices/MainSlice";
 import { setCurrentApplicationIdAction } from 'Slices/ApplicationsSlice'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +21,8 @@ import { mockProducts } from '../../consts';
 import { setApplicationsAction, setCurrentApplicationDateAction, setProductsFromApplicationAction } from 'Slices/ApplicationsSlice'
 import { useCurrentApplicationId } from 'Slices/ApplicationsSlice'
 import AdminApplicationsPage from 'pages/AdminApplicationsPage/AdminApplicationsPage';
+import AddProductPage from 'pages/AddProductPage';
+import EditProductPage from 'pages/EditProductPage';
 
 const cookies = new Cookies();
 
@@ -45,11 +47,13 @@ function App() {
   const dispatch = useDispatch();
   const isAuth = useIsAuth();
   const user = useUser();
+  const isLoading = useIsProductsLoading();
+
 
   const getInitialUserInfo = async () => {
     console.log(cookies.get("session_id"))
     try {
-      const response: AxiosResponse = await axios('http://localhost:8000/user_info',
+      const response: AxiosResponse = await axios('http://localhost:8000/user_info/',
       { 
         method: 'GET',
         withCredentials: true, 
@@ -72,23 +76,7 @@ function App() {
     }
   }
 
-  // const getCategories = async () => {
-  //   let url = 'http://127.0.0.1:8000/categories'
-  //   try {
-  //       const response = await axios.get(url)
-  //       const categories = response.data.map((raw: ReceivedCategoryData) => ({
-  //           id: raw.id,
-  //           title: raw.title
-  //       }))
-  //       categories.unshift({ id: 100000, title: 'Все категории' });
-  //       console.log(categories)
-  //       dispatch(setCategoriesAction(categories))
-  //   } catch {
-  //       console.log('запрос не прошел !')
-  //   }
-  // }
-
-  const getProducs = async () => {
+  const getProducts = async () => {
     try {
         const response = await axios('http://localhost:8000/products/', {
             method: 'GET',
@@ -110,12 +98,14 @@ function App() {
     }
     catch {
       dispatch(setProductsAction(mockProducts));
+    } finally {
+      dispatch(setIsProductsLoadingAction(false))
     }
 };
 
 const getCurrentApplication = async (id: number) => {
   try {
-    const response = await axios(`http://localhost:8000/applications/${id}`, {
+    const response = await axios(`http://localhost:8000/applications/${id}/`, {
       method: 'GET',
       withCredentials: true,
     })
@@ -158,10 +148,11 @@ const getCurrentApplication = async (id: number) => {
 // };
 
   React.useEffect(() => {
+    dispatch(setIsProductsLoadingAction(true))
     if (cookies.get("session_id")) {
       getInitialUserInfo();
     }
-    getProducs();
+    getProducts();
   }, [])
 
   return (
@@ -169,20 +160,26 @@ const getCurrentApplication = async (id: number) => {
       <HashRouter>
           <Routes>
               <Route path='/' element={<ProductsPage/>}/>
-              <Route path="/products" element={<ProductsPage />} />
-              {isAuth && user.isSuperuser && <Route path="/admin" element={<AdminProductsPage />} />}
-              {isAuth && user.isSuperuser && <Route path="/applications" element={<AdminApplicationsPage />} />}
-              <Route path="/products">
+              <Route path="/products/" element={<ProductsPage />} />
+              {isAuth && user.isSuperuser && <Route path="/products/admin/" element={<AdminProductsPage />} />}
+              {isAuth && user.isSuperuser && <Route path="/applications/" element={<AdminApplicationsPage />} />}
+              {isAuth && user.isSuperuser && <Route path="/admin/add/" element={<AddProductPage />} />}
+              {isAuth && user.isSuperuser && <Route path="/admin/edit/:id/" element={<EditProductPage />} />}
+              <Route path="/products/">
                 <Route path=":id" element={<DetaliedPage />} />
               </Route>
-              {!isAuth && <Route path='/registration' element={<RegistrationPage/>}></Route>}
-              {!isAuth && <Route path='/login' element={<LoginPage/>}></Route>}
-              {isAuth && !user.isSuperuser && <Route path='/application' element={<CurrentApplicationPage/>}/>}
-              {isAuth && !user.isSuperuser && <Route path='/applications' element={<ApplicationsListPage/>}></Route>}
-              {isAuth && !user.isSuperuser && <Route path="/applications">
-                <Route path=":id" element={<SelectedApplicationPage />} />
+              {!isAuth && <Route path='/registration/' element={<RegistrationPage/>}></Route>}
+              {!isAuth && <Route path='/login/' element={<LoginPage/>}></Route>}
+              
+              {/* проверить урл */}
+              {/* {isAuth && !user.isSuperuser && <Route path='/application/' element={<SelectedApplicationPage/>}/>} */}
+              {isAuth && !user.isSuperuser && <Route path='/applications/' element={<ApplicationsListPage/>}></Route>}
+              {/* {isAuth && !user.isSuperuser && <Route path="/applications/"> */}
+              {isAuth  && <Route path="/applications/">
+                <Route path=":id/" element={<SelectedApplicationPage />} />
               </Route>}
               <Route path="*" element={<Navigate to="/" replace />} />
+              
           </Routes>
       </HashRouter>
       <ToastContainer autoClose={1500} pauseOnHover={false} />

@@ -30,7 +30,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({products, className, flag}
 
   const deleteProductFromApplication = async (id: number) => {
     try {
-      const response = axios(`http://localhost:8000/application_product/${id}/delete`, {
+      const response = axios(`http://localhost:8000/application_product/${id}/delete/`, {
         method: 'DELETE',
         withCredentials: true
       })
@@ -39,7 +39,7 @@ const ProductsTable: React.FC<ProductsTableProps> = ({products, className, flag}
 
       dispatch(setProductsFromApplicationAction(productss.filter(product => product.id !== id)))
 
-      toast.success("Блюдо успешно удалено!");
+      toast.success("Блюдо удалено!");
     } catch(error) {
       throw error;
     }

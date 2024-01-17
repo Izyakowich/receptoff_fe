@@ -9,14 +9,14 @@ interface ProductData {
   src: string
 }
 
-// export type ReceivedProductData = {
-//   id: number,
-//   product_name: string,
-//   product_info: string,
-//   price: number,
-//   status: string,
-//   photo: string,
-// }
+export type ReceivedProductData = {
+  id: number,
+  product_name: string,
+  product_info: string,
+  price: number,
+  status: string,
+  photo: string,
+}
 interface DataState {
   product: ProductData,
   LinksMapData: Map<string, string>

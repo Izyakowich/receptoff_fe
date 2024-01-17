@@ -48,12 +48,20 @@ const ApplicationsListPage = () => {
     }
 
     React.useEffect(() => {
-        dispatch(setLinksMapDataAction(new Map<string, string>([
-            ['Заявки', '/applications/']
-        ])))
-        getAllApplications()
-    }, [])
+      dispatch(setLinksMapDataAction(new Map<string, string>([
+        ['Заявки', '/applications']
+      ]))),
+      getAllApplications();
     
+      const intervalId = setInterval(() => {
+        getAllApplications();
+      }, 1000);
+    
+      return () => {
+        clearInterval(intervalId);
+      };
+    }, []);
+
     return (
         <div className={styles.applications__page}>
             <Header/>
@@ -62,7 +70,7 @@ const ApplicationsListPage = () => {
                 <h1 className={styles['applications__page-title']}>История ваших заявок</h1>
                 <ApplicationsTable applications={applications}/>
                 <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
-                    <h3 className={styles.modal__title}>Регистрация прошла успешно!</h3>
+                    <h3 className={styles.modal__title}>Вы зарегистрированы!</h3>
                 </ModalWindow>
             </div>
         </div>

@@ -52,7 +52,7 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
 
   const getCurrentApplication = async (id: number) => {
     try {
-      const response = await axios(`http://localhost:8000/applications/${id}`, {
+      const response = await axios(`http://localhost:8000/applications/${id}/`, {
         method: 'GET',
         withCredentials: true,
       })
@@ -99,12 +99,12 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
               <td>{application.creationDate}</td>
               <td>{application.publicationDate ? application.publicationDate : '-'}</td>
               <td>{application.approvingDate ? application.approvingDate : '-'}</td>
-              <td>{application.readyStatus==false ? "Готовится" : 'Готово'}</td>
+              <td>{application.readyStatus==false ? "Готовится" : "Готово"}</td>
               <td className={styles.table__action}>
                 {/* <Link to={`/applications/${application.id}`}>
                 <Button>Подробнее</Button>
                 </Link> */}
-                <Link to={`/applications/${application.id}`}>
+                <Link to={`/applications/${application.id}/`}>
                   <Button style={{backgroundColor: '#f6881b'}} onClick={() => handleDetailedButtonClick(application.id)}>Подробнее</Button>
                 </Link>
               </td>

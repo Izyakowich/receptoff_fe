@@ -1,0 +1,67 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+.uploadButton {
+  // Add your custom styles here
+  background-color: black;
+  color: white;
+  width: 50%;
+  border: none;
+  // Other styles...
+}
+  .formContainer {
+    margin-top: -100px; /* Adjust to center vertically considering the header */
+    width: 50%; /* Adjust the width as needed */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .formGroup {
+    margin-bottom: 20px;
+  }
+  
+  .inputField,
+  .textAreaField {
+    width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .submitButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f6881b;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .submitButton + .submitButton {
+    // margin-left: 50px; /* Change the value as needed */
+    width: 100%;
+  }
+  .drop_button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f6881b;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .submitButton:hover {
+    background-color: gray;
+  }
+
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Adjust the gap as per your design */
+  }

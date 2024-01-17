@@ -1,0 +1,45 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Use full height to center vertically */
+  }
+  
+  .formContainer {
+    margin-top: -100px; /* Adjust to center vertically considering the header */
+    width: 50%; /* Adjust the width as needed */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .form > div {
+    margin-bottom: 1rem; /* Space out the form items */
+  }
+  
+  .input,
+  .textarea,
+  .button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  .button {
+    background-color: #f6881b;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: gray;
+  }
+
+  .buttonContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem; /* Adjust the gap as per your design */
+  }

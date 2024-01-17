@@ -17,3 +17,4 @@ const BasketIcon: React.FC<IconProps> = ({onClick}) => {
 }
 
 export default BasketIcon;
+

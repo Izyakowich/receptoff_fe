@@ -54,7 +54,7 @@ const LoginPage: React.FC = () => {
 
             console.log('formdata is', formData)
         
-            const response: AxiosResponse = await axios.post('http://localhost:8000/login', formData, {
+            const response: AxiosResponse = await axios.post('http://localhost:8000/login/', formData, {
                 withCredentials: true
             });
             console.log(response.data)
@@ -67,7 +67,7 @@ const LoginPage: React.FC = () => {
                 isSuperuser: response.data.is_superuser
             }));
 
-            toast.success("Вход выполнен успешно");
+            toast.success("Вы вошли в аккаунт");
 
         } catch (error) {
             toast.error("Неверный логин или пароль");

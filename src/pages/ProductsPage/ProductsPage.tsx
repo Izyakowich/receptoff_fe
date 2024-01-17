@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -6,19 +7,22 @@ import Header from 'components/Header';
 import OneCard from 'components/Card';
 import styles from './ProductsPage.module.scss'
 import { ChangeEvent } from 'react';
+import ApplicationIcon from 'components/Icons/ApplicationIcon';
 import Dropdown from 'react-bootstrap/Dropdown';
 import SliderFilter from 'components/Slider';
 import BreadCrumbs from 'components/BreadCrumbs';
 import Loader from 'components/Loader';
 import { toast } from 'react-toastify';
 import { mockProducts } from '../../../consts';
+import {useUser, useIsAuth, setIsAuthAction, setUserAction} from "../../Slices/AuthSlice";
+import { useIsMainPage } from 'Slices/MainSlice';
 import {useDispatch} from "react-redux";
 import {  useTitleValue, useProducts, usePriceValues,
-      setTitleValueAction, setProductsAction, setPriceValuesAction} from "../../Slices/MainSlice";
+      setTitleValueAction, setProductsAction, useIsProductsLoading, setIsMainPageAction, setIsProductsLoadingAction } from "../../Slices/MainSlice";
 
 import { useLinksMapData, setLinksMapDataAction } from 'Slices/DetailedSlice';
 
-import { useProductsFromApplication, setProductsFromApplicationAction } from 'Slices/ApplicationsSlice';
+import { useProductsFromApplication, setProductsFromApplicationAction, useCurrentApplicationId, setCurrentApplicationIdAction } from 'Slices/ApplicationsSlice';
 
 export type product = {
     id: number,
@@ -55,7 +59,13 @@ const ProductsPage: React.FC = () => {
     const priceValues = usePriceValues();
     const productsFromApplication = useProductsFromApplication();
     const linksMap = useLinksMapData();
-    const [isLoading, setIsLoading] = React.useState(false)
+    const isLoading = useIsProductsLoading()
+    const isMainPage = useIsMainPage()
+    const navigate = useNavigate()
+    const currentApplicationId = useCurrentApplicationId()
+
+    let user = useUser();
+    const isUserAuth = useIsAuth();
 
     // const linksMap = new Map<string, string>([
     //     ['Блюда', '/']
@@ -65,20 +75,22 @@ const ProductsPage: React.FC = () => {
         dispatch(setLinksMapDataAction(new Map<string, string>([
             ['Блюда', '/products']
         ])))
+
+        getProductss();
+
+        dispatch(setIsMainPageAction(true))
+
+        return () => {
+            dispatch(setIsMainPageAction(false))
+        }
+
     }, [])
 
     const getProducts = async () => {
-        let url = 'http://localhost:8000/products'
-        if (titleValue) {
+        let url = 'http://localhost:8000/products/'
+        // if (titleValue) {
             url += `?title=${titleValue}`
-            
-            if (priceValues) {
-                url += `&min_price=${priceValues[0]}&max_price=${priceValues[1]}`
-            }
         
-        } else if (priceValues){
-            url += `?min_price=${priceValues[0]}&max_price=${priceValues[1]}`
-        }
         try {
             const response = await axios(url, {
                 method: 'GET',
@@ -107,11 +119,28 @@ const ProductsPage: React.FC = () => {
                 dispatch(setProductsAction(mockProducts));
             }
         }
+        finally {
+            dispatch(setIsProductsLoadingAction(false))
+        }
     };
+
+    const getProductss = async () => {
+        try {
+            const response = await axios(`http://localhost:8000/products/`, {
+                method:'GET',
+                withCredentials: true,
+            })
+            const request_id = response.data.application_id;
+            dispatch(setCurrentApplicationIdAction(request_id));
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
     const postProductToApplication = async (id: number) => {
         try {
-            const response = await axios(`http://localhost:8000/products/${id}/post`, {
+            const response = await axios(`http://localhost:8000/products/${id}/post/`, {
                 method: 'POST',
                 withCredentials: true,
             })
@@ -123,14 +152,16 @@ const ProductsPage: React.FC = () => {
                 src: response.data.photo
             }
             console.log(response)
+            getProductss();
             dispatch(setProductsFromApplicationAction([...productsFromApplication, addedProduct]))
-            toast.success("Блюдо успешно добавлено в заявку!");
+            toast.success("Блюдо добавлено в заявку!");
         } catch {
             toast.error("Блюдо уже добавлен в заявку!");
         }
     }
 
     const handleSearchButtonClick = () => {
+        dispatch(setIsProductsLoadingAction(true))
         getProducts();
     }
 
@@ -138,12 +169,13 @@ const ProductsPage: React.FC = () => {
         dispatch(setTitleValueAction(event.target.value));
     };
 
-    const handleSliderChange = (values: number[]) => {
-        dispatch(setPriceValuesAction(values));
-    };
-
     const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+    };
+
+    const handleClick = (id: number) => {
+        navigate(`/applications/${id}/`, { state: { flag: false } });
+        // navigate(`/application/`, { state: { flag: false } });
     };
 
 
@@ -151,10 +183,14 @@ const ProductsPage: React.FC = () => {
         <div className={styles['main__page']}>
             <Header/>
             <div className={styles['main__page-wrapper']}>
-                <BreadCrumbs links={linksMap}></BreadCrumbs>
-
-               
-
+                {isUserAuth && !user.isSuperuser &&
+                        <div className={styles['application__icon-wrapper']}>
+                            {isMainPage &&
+                                // <ApplicationIcon onClick={() => navigate(`/applications/${currentApplicationId}/`)}/>
+                                <ApplicationIcon onClick={() => {currentApplicationId !== null && handleClick(currentApplicationId)}}/>
+                            }
+                        </div>
+                    }
                 <Form className={styles['form']} onSubmit={handleFormSubmit}>
                     <div className={styles.form__wrapper}>
                         {/* <Form.Group controlId="search__sub.input__sub"> */}
@@ -165,13 +201,6 @@ const ProductsPage: React.FC = () => {
                         {/* </Form.Group> */}
                         <div className={styles['form__dropdown-wrapper']}>
                             
-                            {/* <SliderFilter
-                                onChangeValues={handleSliderChange}
-                                minimum={0}
-                                maximum={10000}
-                                currentValues={priceValues}
-                                title="Диапазон цен:"
-                            /> */}
                         </div>
                         <Button className={styles['form__mobile-button']} onClick={() => handleSearchButtonClick()}>Найти</Button>
                     </div>
