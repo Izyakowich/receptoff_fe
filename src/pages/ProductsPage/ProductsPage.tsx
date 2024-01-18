@@ -76,7 +76,7 @@ const ProductsPage: React.FC = () => {
             ['Блюда', '/products']
         ])))
 
-        getProductss();
+        getProducts();
 
         dispatch(setIsMainPageAction(true))
 

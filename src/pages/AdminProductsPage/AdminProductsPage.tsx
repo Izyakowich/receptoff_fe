@@ -18,9 +18,6 @@ import AddButton from 'components/Icons/AddButton';
 import { useNavigate } from 'react-router-dom';
 
 
-
-
-
 export type ReceivedProductData = {
   id: number,
   product_name: string,
@@ -46,11 +43,30 @@ const columns = [
     },
 ]
 
+
 const AdminProductsPage = () => {
     const dispatch = useDispatch()
     const products = useProducts()
     const navigate = useNavigate()
     const [isProductsShow, setIsProductsShow] = useState(true)
+
+    const getProducts = async () => {
+        try {
+            const response = await axios(`http://localhost:8000/products/`, {
+                method:'GET',
+                withCredentials: true,
+            })
+            const request_id = response.data.application_id;
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
+React.useEffect(() => {
+    getProducts()
+  }, [])
+
 
   return (
     <div className={styles.admin__page}>

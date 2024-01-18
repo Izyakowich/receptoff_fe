@@ -10,7 +10,7 @@ import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useCurrentApplicationDate, useProductsFromApplication,
   setCurrentApplicationDateAction, setProductsFromApplicationAction, setCurrentApplicationIdAction } from 'Slices/ApplicationsSlice'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface ApplicationData {
   id: number;
@@ -49,6 +49,7 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
   const dispatch = useDispatch();
   const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
   const [currentProducts, setCurrentProducts] = useState<ProductData[]>([])
+  const navigate = useNavigate();
 
   const getCurrentApplication = async (id: number) => {
     try {
@@ -70,9 +71,14 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
     }
   }
 
+  // const handleDetailedButtonClick = (id: number) => {
+  //   getCurrentApplication(id);
+  //   setIsModalWindowOpened(true)
+  // };
+
   const handleDetailedButtonClick = (id: number) => {
-    getCurrentApplication(id);
-    setIsModalWindowOpened(true)
+    // Modify the function to navigate to the CurrentApplicationPage route
+    navigate(`/detailed/${id}/`); // Assuming the route for CurrentApplicationPage is '/applications/:id'
   };
 
   return (
@@ -101,9 +107,7 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
               <td>{application.approvingDate ? application.approvingDate : '-'}</td>
               <td>{application.readyStatus==false ? "Готовится" : "Готово"}</td>
               <td className={styles.table__action}>
-                {/* <Link to={`/applications/${application.id}`}>
-                <Button>Подробнее</Button>
-                </Link> */}
+                
                 <Link to={`/applications/${application.id}/`}>
                   <Button style={{backgroundColor: '#f6881b'}} onClick={() => handleDetailedButtonClick(application.id)}>Подробнее</Button>
                 </Link>
@@ -114,21 +118,19 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
       </Table>
     </div>
 
-      <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
+      {/* <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
       <h3 className={styles.modal__title}>Добавленные блюда</h3>
       <div className={styles.modal__list}>
         {currentProducts.map((product: ProductData, index: number) => (
-          // console.log("abra"),
-          // console.log(product.title),
           <div className={styles['modal__list-item']}>
             <div className={styles['modal__list-item-title']}>
-              {product.title} "{product.title}"
+            <b>{product.title}</b>
             </div>
             <b>{product.price} ₽</b>
           </div>
         ))}
       </div>
-      </ModalWindow>
+      </ModalWindow> */}
     </>
   );
 }

@@ -8,7 +8,7 @@ import BreadCrumbs from 'components/BreadCrumbs';
 import { useDispatch } from 'react-redux';
 import { useLinksMapData, setLinksMapDataAction } from 'Slices/DetailedSlice';
 import { useLocation } from 'react-router-dom';
-import { useCurrentApplicationDate, useProductsFromApplication,
+import { useCurrentApplicationDate, useProductsFromApplication, setCurrentApplicationIdAction,
   setCurrentApplicationDateAction, setProductsFromApplicationAction, useCurrentApplicationId } from 'Slices/ApplicationsSlice'
 import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
@@ -88,8 +88,12 @@ const SelectedApplicationPage = () => {
   const productsFromApplication = useProductsFromApplication()
   const [dateValue, setDateValue] = useState('')
   const currentApplicationId = useCurrentApplicationId()
+  const [isCard, setIsCard] = useState(false)
 
   React.useEffect(() => {
+    if (Number(id) == currentApplicationId) {
+      setIsCard(true)
+    }
     console.log('flag', flag)
   }, [])
 
@@ -100,7 +104,7 @@ const SelectedApplicationPage = () => {
           withCredentials: true,
         })
 
-        const newArr = response.data.products.map((raw: ReceivedProductData) => ({
+        const newArr = response.data.product.map((raw: ReceivedProductData) => ({
           id: raw.id,
           title: raw.product_name,
           price: raw.price,
@@ -108,6 +112,7 @@ const SelectedApplicationPage = () => {
           src: raw.photo,
       }));
       setCurrentProduct(newArr)
+      console.log(newArr)
       } catch(error) {
         throw error;
       }
@@ -125,6 +130,7 @@ const SelectedApplicationPage = () => {
 
       dispatch(setProductsFromApplicationAction([]));
       dispatch(setCurrentApplicationDateAction(''));
+      dispatch(setCurrentApplicationIdAction(0));
       toast.success("Заявка успешно отправлена на проверку!");
     } catch(error) {
       throw error;
@@ -140,6 +146,7 @@ const SelectedApplicationPage = () => {
 
     dispatch(setProductsFromApplicationAction([]));
     dispatch(setCurrentApplicationDateAction(''));
+    dispatch(setCurrentApplicationIdAction(0));
     toast.success("Заявка успешно удалена!");
     }
     catch(error) {
@@ -191,11 +198,14 @@ const SelectedApplicationPage = () => {
                 <div>
                   {!flag ? <>
                     
-                  <ProductsTable flag={false} products={productsFromApplication} className={styles['application__page-table']}/>
+                  <ProductsTable flag={false} products={currentProduct} className={styles['application__page-table']}/>
                   <div className={styles['application__page-info-btns']}>
-                  
+                  {isCard && 
                     <Button onClick={() => handleSendButtonClick()} className={styles['application__page-info-btn']}>Отправить</Button>
+                  } 
+                  {isCard &&
                     <Button onClick={() => handleDeleteButtonClick()} className={styles['application__page-info-btn']}>Удалить</Button>
+                  }
                   </div>
                   </>
                   : <ProductsTable flag={true} products={currentProduct} className={styles['application__page-table']}/>

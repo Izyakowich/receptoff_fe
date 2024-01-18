@@ -10,7 +10,7 @@ import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import { useCurrentApplicationDate, useProductsFromApplication,
   setCurrentApplicationDateAction, setProductsFromApplicationAction, setCurrentApplicationIdAction, useApplications, setApplicationsAction } from 'Slices/ApplicationsSlice'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CancelIcon from 'components/Icons/CancelIcon';
 import AcceptIcon from 'components/Icons/AcceptIcon';
 
@@ -62,6 +62,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
   const applications = useApplications()
   const [isModalWindowOpened, setIsModalWindowOpened] = useState(false);
   const [currentProducts, setCurrentProducts] = useState<ProductData[]>([])
+  const navigate = useNavigate();
 
   const getAllApplications = async () => {
     try {
@@ -147,8 +148,9 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
   
 
   const handleDetailedButtonClick = (id: number) => {
-    getCurrentApplication(id)
+    // getCurrentApplication(id)
     setIsModalWindowOpened(true)
+    navigate(`/admin/detailed/${id}/`); // Assuming the route for CurrentApplicationPage is '/applications/:id'
   };
 
   const handleAcceptButtonClick = (id: number) => {
@@ -190,10 +192,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
               <td>{application.publicationDate ? application.publicationDate : '-'}</td>
               <td>{application.approvingDate ? application.approvingDate : '-'}</td>
               <td className={styles.table__action}>
-                {/* <Link to={`/applications/${application.id}`}>
-                <Button>Подробнее</Button>
-                </Link> */}
-                {/* <Link to={`/applications/${application.id}`}> */}
+                
                   <Button style={{backgroundColor: '#f6881b'}} onClick={() => handleDetailedButtonClick(application.id)}>Подробнее</Button>
                   {application.status === 'Проверяется' && <><CancelIcon onClick={() => handleCancelButtonClick(application.id)}></CancelIcon>
                   <AcceptIcon onClick={() => handleAcceptButtonClick(application.id)}></AcceptIcon></>}
@@ -206,7 +205,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
       </Table>
     </div>
 
-      <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
+      {/* <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
       <h3 className={styles.modal__title}>Добавленные блюда</h3>
       <div className={styles.modal__list}>
         {currentProducts.map((product: ProductData, index: number) => (
@@ -218,7 +217,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
           </div>
         ))}
       </div>
-      </ModalWindow>
+      </ModalWindow> */}
     </>
   );
 }
