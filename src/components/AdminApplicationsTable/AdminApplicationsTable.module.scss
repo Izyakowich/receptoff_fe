@@ -31,8 +31,12 @@ thead {
         color: #f6881b;
     }
 
+    // &__btn:hover {
+    //     background-color: #f6881b !important;
+    // }
+
     &__btn:hover {
-        background-color: #f6881b !important;
+        background-color: gray;
     }
 
     &__action {

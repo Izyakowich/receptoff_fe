@@ -6,8 +6,9 @@ import applicationsDataReducer from 'Slices/ApplicationsSlice'
 import FilterSlice from "Slices/FilterSlice"
 
 
+export type RootState = ReturnType<typeof store.getState>;
 
-export default configureStore({
+const store = configureStore({
     reducer: combineReducers({
         mainData: mainDataReducer,
         detailedData: detailedDataReducer,
@@ -16,3 +17,5 @@ export default configureStore({
         filterSliceData: FilterSlice
     })
 })
+
+export default store

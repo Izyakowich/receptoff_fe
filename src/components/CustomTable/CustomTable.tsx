@@ -233,7 +233,7 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
       <div className={`${styles.table__container} ${className}`}>
       <div className={`${styles.table__add} ${className}`}>
       </div>
-      <Table>
+      <Table hover>
           <thead>
             <tr>
               {columns.map((column, index) => (

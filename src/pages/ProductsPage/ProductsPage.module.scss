@@ -106,6 +106,10 @@
         max-width: 150px;
     }
 
+    &__button:hover {
+        background-color: gray!important;
+    }
+
     &__mobile-button {
         background-color: #f6881b;
         padding: 15px 40px;
@@ -114,6 +118,10 @@
         height: 60px;
         max-width: 150px;
         display: none;
+    }
+
+    &__mobile-button:hover {
+        background-color: gray!important;
     }
 }
 

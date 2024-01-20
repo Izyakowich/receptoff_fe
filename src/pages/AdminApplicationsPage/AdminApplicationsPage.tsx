@@ -10,19 +10,16 @@ import BreadCrumbs from 'components/BreadCrumbs'
 import ArrowDownIcon from 'components/Icons/ArrowDownIcon'
 import AdminApplicationsTable from 'components/AdminApplicationsTable'
 import { useLinksMapData, setLinksMapDataAction } from 'Slices/DetailedSlice'
-// import { useStartDate, useEndDate, useEmailValue, useStatusValue, setStartDateAction, setEndDateAction, setEmailValueAction, setStatusValueAction } from 'Slices/FilterSlice';
+// import { setAppValueAction, setAppDropdownValueNameAction, setAppDropdownValueIdAction, useInputValue, useStatusValue } from "Slices/FilterSlice"
+import { RootState } from 'Slices/Store'
+
 import {
-  setAppValueAction,
-  setAppDropdownValueNameAction,
-  setAppDropdownValueIdAction,
-  useInputValue,
-} from "Slices/FilterSlice"
-import { RootState } from '@reduxjs/toolkit/query'
-
-// import {UserData} from 'Slices/AuthSlice'
-
-// import { useEmailValue, setEmailValueAction } from "../../Slices/MainSlice";
-
+  setSearchTerm,
+  setStatusFilter,
+  setStartDate,
+  setEndDate,
+  selectFilters,
+} from 'Slices/FilterSlice';
 const statuses = ["Все", "Проверяется","Отказано", "Принято"]
 
 export type ReceivedApplicationData = {
@@ -49,76 +46,33 @@ export type ApplicationData = {
 
 const AdminApplicationsPage = () => {
   const applications = useApplications()
-  const linksMap = useLinksMapData()
   const dispatch = useDispatch()
   const [startTime, setStartTime] = useState('')
   const [endTime, setEndTime] = useState('')
   const [statusValue, setStatusValue] = useState(statuses[0])
-  // const emailValue = useEmailValue()
   const [emailValue, setEmailValue] = useState('')
 
-  // const startDate = useStartDate();
-  // const endDate = useEndDate();
-  // const emailValue = useEmailValue();
-  // const statusValue = useStatusValue();
 
-  // const handleStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(setStartDateAction(event.target.value));
-  // };
+  const filters = useSelector(selectFilters);
 
-  // const handleEndDateChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(setEndDateAction(event.target.value));
-  // };
-
-  // const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(setEmailValueAction(event.target.value));
-  // };
+  // const searchValue = useInputValue()
   
-  // const handleStatusChange = (event: ChangeEvent<HTMLInputElement>) => {
-  //   dispatch(setStatusValueAction(event.target.value));
-  // };
-
-  const searchValue = useInputValue()
-  
-  // const selectedStatus = useSelector(
-  //   (state: RootState) => state.moderApp.dropdown_value.id
-  // )
-  // const searchValue = useSelector(
-  //   (state: RootState) => state.moderApp.input_value
-  // )
-  // const categoryValue = useSelector(
-  //   (state: RootState) => state.moderApp.dropdown_value
-  // )
 
   const getAllApplications = async () => {
     let res = ''
-    if (startTime && endTime) {
-      res += `?start=${startTime}&end=${endTime}`
-    } else if(startTime) {
-      res += `?start=${startTime}`
-    } else if(endTime) {
-      res += `?end=${endTime}`
+    if (filters.startDate && filters.endDate) {
+      res += `?start=${filters.startDate}&end=${filters.endDate}`
+    } else if(filters.startDate) {
+      res += `?start=${filters.startDate}`
+    } else if(filters.endDate) {
+      res += `?end=${filters.endDate}`
     }
 
-    if (res.length === 0 && statusValue !== 'Все') {
-      res += `?status=${statusValue}`
-    } else if (res.length !== 0 && statusValue !== 'Все'){
-      res += `&status=${statusValue}`
+    if (res.length === 0 && filters.statusFilter !== 'Все') {
+      res += `?status=${filters.statusFilter}`
+    } else if (res.length !== 0 && filters.statusFilter !== 'Все'){
+      res += `&status=${filters.statusFilter}`
     }
-
-    // if (startDate && endDate) {
-    //   res += `?start=${startDate}&end=${endDate}`;
-    // } else if (startDate) {
-    //   res += `?start=${startDate}`;
-    // } else if (endDate) {
-    //   res += `?end=${endDate}`;
-    // }
-
-    // if (res.length === 0 && statusValue !== 'Все') {
-    //   res += `?status=${statusValue}`;
-    // } else if (res.length !== 0 && statusValue !== 'Все') {
-    //   res += `&status=${statusValue}`;
-    // }
 
     try {
       const response = await axios(`http://localhost:8000/applications/${res}`, {
@@ -137,53 +91,67 @@ const AdminApplicationsPage = () => {
         moderatorEmail: raw.moderator_email
     }));
 
+    console.log("##################")
+
+    // console.log(searchValue)
     dispatch(setApplicationsAction(newArr.filter((application: ApplicationData) => {
-      return application.userEmail ? application.userEmail.includes(searchValue) : false;
+      return application.userEmail ? application.userEmail.includes(filters.searchTerm) : false;
     })));
 
     } catch(error) {
       throw error
     }
   }
+//##############
+const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
+  dispatch(setSearchTerm(event.target.value));
+};
+
+const handleStatusChange = (eventKey: string | null) => {
+  dispatch(setStatusFilter(eventKey ?? ''));
+};
+
+const handleStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+  dispatch(setStartDate(event.target.value));
+};
+
+const handleEndDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+  dispatch(setEndDate(event.target.value));
+};
+//###############
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     getAllApplications()
   }
 
+  // const handleTitleValueChange = (event: ChangeEvent<HTMLInputElement>)  => { //имейл 
+  //   dispatch(setAppValueAction(event.target.value))
+  // }
+  
   const handleCategorySelect = (eventKey: string | null) => {
     if (eventKey !== null) {
       const selectedStatus = statuses.find(status => status === eventKey)
-      if (selectedStatus && selectedStatus !== statusValue && selectedStatus) {
+      if (selectedStatus && selectedStatus !== filters.statusFilter && selectedStatus) {
         setStatusValue(selectedStatus)
       }
     }
 };
 
-React.useEffect(() => {
-  dispatch(setLinksMapDataAction(new Map<string, string>([
-      ['Заявки', '/applications']
-  ])))
-}, [])
 
 React.useEffect(() => {
-  // getAllApplications()
   const intervalId = setInterval(() => getAllApplications(), 1000);
 
   return () => {
     clearInterval(intervalId);
   };
-}, [statusValue, startTime, endTime, emailValue]);
+}, [filters.statusFilter, filters.startDate, filters.endDate, filters.searchTerm]);
 
 React.useEffect(() => {
   dispatch(setApplicationsAction(applications.filter((application: ApplicationData) => {
-    return application.userEmail ? application.userEmail.includes(emailValue) : false;
+    return application.userEmail ? application.userEmail.includes(filters.searchTerm) : false;
   })));
-}, [emailValue])
-
-// React.useEffect(() => {
-  
-// }, [])
+}, [filters.searchTerm])
 
   return (
     <div className={styles.admin__page}>
@@ -197,12 +165,12 @@ React.useEffect(() => {
               <div className={styles.form__item}>
               Начальная дата
               <Form.Control 
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  setStartTime(event.target.value);
-                  // handleStartDateChange(event);
-
-                }} 
-                value={startTime} 
+                // onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                //   setStartTime(event.target.value);
+                // }} 
+                // value={startTime} 
+                onChange={handleStartDateChange}
+                value={filters.startDate}
                 className={styles.form__input} 
                 type="date" 
                 placeholder="Начальная дата" 
@@ -211,12 +179,12 @@ React.useEffect(() => {
               <div className={styles.form__item}>
               Конечная дата
               <Form.Control 
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  setEndTime(event.target.value);
-                  // handleEndDateChange(event);
-
-                }} 
-                value={endTime} 
+                // onChange={(event: ChangeEvent<HTMLInputElement>) => {
+                //   setEndTime(event.target.value);
+                // }} 
+                // value={endTime} 
+                onChange={handleEndDateChange}
+                value={filters.endDate}
                 className={styles.form__input} 
                 type="date" 
                 placeholder="Конечная дата" 
@@ -225,7 +193,7 @@ React.useEffect(() => {
 
               <div className={styles.form__item}>
                 Статус заявки
-              <Dropdown className={styles['dropdown']} onSelect={handleCategorySelect}>
+              <Dropdown className={styles['dropdown']} onSelect={handleStatusChange}>
                 <Dropdown.Toggle
                     className={styles['dropdown__toggle']}
                     style={{
@@ -234,7 +202,7 @@ React.useEffect(() => {
                         color: '#000',
                     }}
                 >   
-                    {statusValue}
+                    {filters.statusFilter}
                     <ArrowDownIcon className={styles.dropdown__icon}/>
                 </Dropdown.Toggle>
                 <Dropdown.Menu className={styles['dropdown__menu']}>
@@ -247,23 +215,16 @@ React.useEffect(() => {
                     </Dropdown.Menu>
                 </Dropdown>
               </div>
-              {/* <div className={styles['dropdown']}>
-                <Form.Control className={styles.form__input} value={emailValue} onChange={handleTitleValueChange} type="text" placeholder="Введите email заказчика..." />
-              </div> */}
               <div className={styles.form__item}>
                 Заказчик
               <Form.Control 
-                onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  setAppValueAction(event.target.value);
-                  // handleEmailChange(event);
-                }} 
-                value={searchValue} 
+                onChange={handleSearchChange} 
+                value={filters.searchTerm} 
                 className={styles.form__input} 
                 type="text" 
                 placeholder="Введите E-mail заказчика" 
               />
               </div>
-              {/* <Button style={{backgroundColor: '#f6881b', borderColor: '#f6881b'}} className={styles.form__btn} type='submit'>Найти</Button> */}
           </Form>
           <AdminApplicationsTable></AdminApplicationsTable>
         </div>

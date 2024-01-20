@@ -131,7 +131,7 @@ useEffect(() => {
         },
         withCredentials: true
       });
-      navigate('/admin/');
+      navigate('/products/admin/');
 
       const updatedProducts = products.map(product => {
         if (product.id === id) {

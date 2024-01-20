@@ -48,9 +48,9 @@ const ApplicationsListPage = () => {
     }
 
     React.useEffect(() => {
-      dispatch(setLinksMapDataAction(new Map<string, string>([
-        ['Заявки', '/applications']
-      ]))),
+      // dispatch(setLinksMapDataAction(new Map<string, string>([
+      //   ['Заявки', '/applications']
+      // ]))),
       getAllApplications();
     
       const intervalId = setInterval(() => {
