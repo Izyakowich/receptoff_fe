@@ -183,6 +183,8 @@ const ProductsPage: React.FC = () => {
         <div className={styles['main__page']}>
             <Header/>
             <div className={styles['main__page-wrapper']}>
+            {/* <BreadCrumbs/> */}
+
                 {isUserAuth && !user.isSuperuser &&
                         <div className={styles['application__icon-wrapper']}>
                             {isMainPage &&

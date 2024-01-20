@@ -8,6 +8,7 @@ import ModalWindow from 'components/ModalWindow';
 import styles from './EditProductPage.module.scss';
 import Button from 'react-bootstrap/Button';
 import { useProduct, useLinksMapData, setProductAction, setLinksMapDataAction } from "../../Slices/DetailedSlice"
+import BreadCrumbs from 'components/BreadCrumbs';
 
 export type ReceivedProductData = {
     id: number,
@@ -158,6 +159,7 @@ useEffect(() => {
   return (
     <div className={styles.container}>
       <Header/>
+      <BreadCrumbs/>
       <div className={styles.formContainer}>
         <h1>Редактирование</h1>
         <form onSubmit={handleFormSubmit}>

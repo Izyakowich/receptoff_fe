@@ -66,7 +66,6 @@ function App() {
       dispatch(setIsAuthAction(true))
       dispatch(setUserAction({
         email: response.data.email,
-        // fullname: response.data.full_name,
         isSuperuser: response.data.is_superuser
       }))
       
@@ -163,9 +162,9 @@ const getCurrentApplication = async (id: number) => {
               <Route path="/products/" element={<ProductsPage />} />
               {isAuth && user.isSuperuser && <Route path="/products/admin/" element={<AdminProductsPage />} />}
               {isAuth && user.isSuperuser && <Route path="/applications/" element={<AdminApplicationsPage />} />}
-              {isAuth && user.isSuperuser && <Route path="/admin/add/" element={<AddProductPage />} />}
-              {isAuth && user.isSuperuser && <Route path="/admin/edit/:id/" element={<EditProductPage />} />}              {isAuth && user.isSuperuser && <Route path="/admin/edit/:id/" element={<EditProductPage />} />}
-              {isAuth && user.isSuperuser && <Route path="/admin/detailed/:id/" element={<SelectedApplicationPage />} />}
+              {isAuth && user.isSuperuser && <Route path="/products/admin/add/" element={<AddProductPage />} />}
+              {isAuth && user.isSuperuser && <Route path="/products/admin/edit/:id/" element={<EditProductPage />} />}              {isAuth && user.isSuperuser && <Route path="/admin/edit/:id/" element={<EditProductPage />} />}
+              {isAuth && user.isSuperuser && <Route path="/applications/detailed/:id/" element={<SelectedApplicationPage />} />}
 
               <Route path="/products/">
                 <Route path=":id" element={<DetaliedPage />} />
@@ -173,15 +172,9 @@ const getCurrentApplication = async (id: number) => {
               {!isAuth && <Route path='/registration/' element={<RegistrationPage/>}></Route>}
               {!isAuth && <Route path='/login/' element={<LoginPage/>}></Route>}
               
-              {/* проверить урл */}
-              {/* {isAuth && !user.isSuperuser && <Route path='/application/' element={<SelectedApplicationPage/>}/>} */}
               {isAuth && !user.isSuperuser && <Route path='/applications/' element={<ApplicationsListPage/>}></Route>}
-              {/* {isAuth && !user.isSuperuser && <Route path="/applications/"> */}
               {isAuth  && <Route path="/applications/">
                 <Route path=":id/" element={<SelectedApplicationPage />} />
-              </Route>}
-              {isAuth  && <Route path="/detailed/">
-                <Route path=":id/" element={<CurrentApplicationPage />} />
               </Route>}
 
               <Route path="*" element={<Navigate to="/" replace />} />

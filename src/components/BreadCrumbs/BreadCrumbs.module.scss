@@ -1,4 +1,4 @@
-.breadcrumbs {
+.breadcrumbss {
     margin-bottom: 40px;
     font-size: 20px;
 
@@ -22,6 +22,36 @@
             margin: 0 10px;
         }
     }
+}
+@import "../../styles/variables.scss";
+
+.breadcrumbs {
+  text-align: left;
+//   max-width: $container-width;
+  margin: 10px auto;
+}
+
+.breadcrumbs > * {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.crumb {
+  &:after {
+    color: #f6881b;
+    content: ">";
+    margin-left: 10px;
+  }
+
+  &:last-child {
+    &::after {
+      display: none;
+    }
+  }
+
+  a {
+    color: #f6881b;
+  }
 }
 
 // color: '#3D348B'

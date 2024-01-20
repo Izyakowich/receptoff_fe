@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 import { setProductsAction, useProducts } from "Slices/MainSlice"; // Adjust this import to your actual file structure
 import Header from 'components/Header' 
 import styles from './AddProductPage.module.scss';
+import BreadCrumbs from 'components/BreadCrumbs';
 
 const AddProductPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -96,8 +97,13 @@ const AddProductPage: React.FC = () => {
   };
 
   return (
+    
     <div className={styles.container}>
       <Header />
+      {/* <div className={styles['admin__page-wrapper']}> */}
+
+      <BreadCrumbs/>
+
       <div className={styles.formContainer}>
         <h1>Добавление услуги</h1>
         <form onSubmit={handleFormSubmit}>
@@ -138,39 +144,8 @@ const AddProductPage: React.FC = () => {
         </div>
         </form>
       </div>
-      {/* <ModalWindow 
-      handleBackdropClick={() => { setIsImageModalWindowOpened(false); setSelectedImage(null); }}
-      active={isImageModalWindowOpened}
-      className={styles.modal}
-    >
-      <h3 className={styles.modal__title}>Выберите картинку</h3>
-      {currentImage && <h4 className={styles.modal__subtitle}>Текущее изображение</h4>}
-      <div className={styles.dropzone__container}>
-        <div className="dropzone__wrapper">
-          {currentImage && 
-            <img className={styles.dropzone__image} src={currentImage} alt="Текущее изображение" />}
-          {selectedImage && 
-            <p className={styles.dropzone__filename}>Вы загрузили: <b>{selectedImage.name}</b></p>}
-          <label className={styles.dropzone__btn} htmlFor="upload">
-            <span className={styles['dropzone__btn-text']}>Загрузите изображение</span>
-          </label>
-          <input 
-            className={styles.drop_button} 
-            id="upload" 
-            type="file" 
-            onChange={handleImageChange} 
-          />
-        </div>
       </div>
-      <Button 
-          disabled={!selectedImage} 
-          className={styles.drop_button} 
-          onClick={() => handleUpload(parseInt(id ?? ''))}
-        >
-        Сохранить
-      </Button>
-    </ModalWindow> */}
-    </div>
+    // </div>
   );
 };
 

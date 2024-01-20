@@ -36,12 +36,7 @@ const dataSlice = createSlice({
 
   } as DataState,
   reducers: {
-    // setCategories(state, action: PayloadAction<CategoryData[]>) {
-    //   state.categories = action.payload
-    // },
-    // setCategoryValue(state, action: PayloadAction<string>) {
-    //   state.categoryValue = action.payload
-    // },
+  
     setTitleValue(state, action: PayloadAction<string>) {
       state.titleValue = action.payload
     },
@@ -65,9 +60,6 @@ const dataSlice = createSlice({
   },
 });
 
-// Состояние, которое будем отображать в компонентах
-// export const useCategories = () =>
-//   useSelector((state: { mainData: DataState }) => state.mainData.categories);
 
  
 export const useTitleValue = () =>
@@ -91,8 +83,8 @@ export const useIsProductsLoading = () =>
 
 // Action, который будем применять в различных обработках
 export const {
-    // setCategories: setCategoriesAction,
-    // setCategoryValue: setCategoryValueAction,
+  
+
     setTitleValue: setTitleValueAction,
     // setEmailValue: setEmailValueAction,
     setProducts: setProductsAction,

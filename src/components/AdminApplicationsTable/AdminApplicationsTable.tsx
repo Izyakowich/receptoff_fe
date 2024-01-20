@@ -24,6 +24,7 @@ interface ApplicationData {
   approvingDate: string;
   readyStatus: boolean;
   userEmail: string;
+  moderatorEmail: string;
 }
 
 interface ProductData {
@@ -55,6 +56,7 @@ export type ReceivedApplicationData = {
   approving_date: string;
   ready_status: boolean;
   user_email: string;
+  moderator_email: string;
 }
 
 const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
@@ -79,7 +81,8 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
         publicationDate: raw.publication_date,
         approvingDate: raw.approving_date,
         readyStatus: raw.ready_status,
-        userEmail: raw.user_email
+        userEmail: raw.user_email,
+        moderatorEmail: raw.moderator_email
     }));
     dispatch(setApplicationsAction(newArr))
     } catch(error) {
@@ -150,7 +153,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
   const handleDetailedButtonClick = (id: number) => {
     // getCurrentApplication(id)
     setIsModalWindowOpened(true)
-    navigate(`/admin/detailed/${id}/`); // Assuming the route for CurrentApplicationPage is '/applications/:id'
+    navigate(`/applications/detailed/${id}/`); // Assuming the route for CurrentApplicationPage is '/applications/:id'
   };
 
   const handleAcceptButtonClick = (id: number) => {
@@ -174,6 +177,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
             <th>№</th>
             <th>Статус</th>
             <th>Заказчик</th>
+            <th>Модератор</th>
             <th>Дата создания</th>
             <th>Дата формирования</th>
             <th>Дата завершения</th>
@@ -188,6 +192,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
               <td>{++index}</td>
               <td>{application.status}</td>
               <td>{application.userEmail}</td>
+              <td>{application.moderatorEmail}</td>
               <td>{application.creationDate}</td>
               <td>{application.publicationDate ? application.publicationDate : '-'}</td>
               <td>{application.approvingDate ? application.approvingDate : '-'}</td>
@@ -205,19 +210,6 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
       </Table>
     </div>
 
-      {/* <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
-      <h3 className={styles.modal__title}>Добавленные блюда</h3>
-      <div className={styles.modal__list}>
-        {currentProducts.map((product: ProductData, index: number) => (
-          <div className={styles['modal__list-item']}>
-            <div className={styles['modal__list-item-title']}>
-              <b>{product.title}</b>
-            </div>
-            <b>{product.price} ₽</b>
-          </div>
-        ))}
-      </div>
-      </ModalWindow> */}
     </>
   );
 }

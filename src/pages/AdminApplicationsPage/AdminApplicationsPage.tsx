@@ -77,7 +77,8 @@ const AdminApplicationsPage = () => {
         publicationDate: raw.publication_date,
         approvingDate: raw.approving_date,
         readyStatus: raw.ready_status,
-        userEmail: raw.user_email
+        userEmail: raw.user_email,
+        moderatorEmail: raw.moderator_email
     }));
 
     dispatch(setApplicationsAction(newArr.filter((application: ApplicationData) => {
@@ -110,7 +111,7 @@ React.useEffect(() => {
 }, [])
 
 React.useEffect(() => {
-  getAllApplications()
+  // getAllApplications()
   const intervalId = setInterval(() => getAllApplications(), 1000);
 
   return () => {
@@ -132,16 +133,8 @@ React.useEffect(() => {
     <div className={styles.admin__page}>
       <Header></Header>
         <div className={styles['admin__page-wrapper']}>
-        <BreadCrumbs links={linksMap}></BreadCrumbs>
+        <BreadCrumbs/>
           <h1 className={styles['admin__page-title']}>Заявки всех пользователей</h1>
-          {/* <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => handleFormSubmit(event)}
-          className={styles['form']}>
-              <div className={styles.form__item}>
-                <Form.Control onChange={(event: ChangeEvent<HTMLInputElement>) => {setStartTime(event.target.value)}} value={startTime} className={styles.form__input} type="date" placeholder="Начальная дата (Год-Месяц-День)*" />
-              </div>
-              <div className={styles.form__item}>
-                <Form.Control onChange={(event: ChangeEvent<HTMLInputElement>) => {setEndTime(event.target.value)}} value={endTime} className={styles.form__input} type="date" placeholder="Конечная дата (Год-Месяц-День)*" />
-              </div> */}
 
         <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => handleFormSubmit(event)}
           className={styles['form']}>

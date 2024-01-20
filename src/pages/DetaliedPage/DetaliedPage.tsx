@@ -62,7 +62,7 @@ const DetailedPage: React.FC = () => {
         <div className='detailed__page'>
             <Header/>
             <div className={styles['detailed__page-wrapper']} style={{paddingTop: "90px"}}>
-                <BreadCrumbs links={linksMap}></BreadCrumbs>
+                <BreadCrumbs/>
                 
                 <div className={styles['detailed__page-container']}>
                     <Image

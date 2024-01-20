@@ -16,6 +16,7 @@ import EditIcon from 'components/Icons/EditIcon';
 import BasketIcon from 'components/Icons/BasketIcon';
 import AddButton from 'components/Icons/AddButton';
 import { useNavigate } from 'react-router-dom';
+import BreadCrumbs from 'components/BreadCrumbs';
 
 
 export type ReceivedProductData = {
@@ -71,8 +72,9 @@ React.useEffect(() => {
   return (
     <div className={styles.admin__page}>
         <Header/>
-
         <div className={styles['admin__page-wrapper']}>
+        <BreadCrumbs/>
+
             {isProductsShow && <><h1 className={styles['admin__page-title']}>Список услуг</h1>
 
             <div className={styles['admin__page-title']}>
@@ -81,25 +83,6 @@ React.useEffect(() => {
             </div>
             </>}
         </div>
-        {/* <ModalWindow handleBackdropClick={() => {setIsAddModalWindowOpened(false); setIsEditModalWindowOpened(false);}}
-                className={styles.modal} active={isAddModalWindowOpened || isEditModalWindowOpened}>
-                <h3 className={styles.modal__title}>Заполните данные</h3>
-                <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => handleCategoryFormSubmit(event)}
-                className={styles['form']}>
-                    <div className={styles.form__item}>
-                    <Form.Control onChange={(event: ChangeEvent<HTMLInputElement>) => {setNewCategoryValue(event.target.value)}} value={newCategoryValue} className={styles.form__input} type="text" placeholder="Название категории*" />
-                    </div>
-                    <Button disabled={newCategoryValue.length !== 0 ? false : true} type='submit'>Сохранить</Button>
-                </Form>
-            </ModalWindow>
-
-            <ModalWindow handleBackdropClick={() => setIsDeleteModalWindowOpened(false)} active={isDeleteModalWindowOpened} className={styles.modal}>
-            <h3 className={styles.modal__title}>Вы уверены, что хотите удалить это блюдо?</h3>
-            <div className={styles['modal__delete-btns']}>
-                <Button onClick={() => deleteCategory()} className={styles.modal__btn}>Подтвердить</Button>
-                <Button onClick={() => setIsDeleteModalWindowOpened(false)} className={styles.modal__btn}>Закрыть</Button>
-            </div>
-            </ModalWindow> */}
     </div>
   )
 }

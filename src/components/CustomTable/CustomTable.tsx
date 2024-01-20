@@ -196,7 +196,7 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
   // }
 
   const handleAddButtonClick = () => {
-    navigate('/admin/add/')
+    navigate('/products/admin/add/')
   }
 
   const handleEditButtonClick = (product: ProductData) => {
@@ -258,60 +258,6 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
           </tbody>
         </Table>
 
-      {/* <div className={`${styles.table__add} ${className}`}>
-      <span className={`${styles['table__add-text']}`}>Добавить блюдо</span><AddButton onClick={() => setIsAddModalWindowOpened(true)}/>
-      </div>
-      <Table>
-          <thead>
-            <tr>
-              {columns.map((column, index) => (
-                <th key={index}>{column.title}</th>
-              ))}
-              {<th>Действия</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {columns.map((column, columnIndex) => (
-                  <td key={columnIndex}>{row[column.key]}</td>
-                ))}
-                <td className={styles.table__action}>
-                  <EditIcon onClick={() => handleEditButtonClick(row)}/>
-                  <ImageIcon onClick={() => handleImageButtonClick(row)}/>
-                  <BasketIcon onClick={() => handleDeleteButtonClick(row.id)}/>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table> */}
-
-        {/* <ModalWindow handleBackdropClick={() => {setIsAddModalWindowOpened(false); setIsEditModalWindowOpened(false); productTitleValue && setProductTitleValue(''); productPriceValue && setProductPriceValue(''); productInfoValue && setProductInfoValue('')}}
-        className={styles.modal} active={isAddModalWindowOpened || isEditModalWindowOpened}>
-          <h3 style={{color: '#f6881b'}}className={styles.modal__title}>Заполните данные</h3>
-          <Form onSubmit={(event: React.FormEvent<HTMLFormElement>) => handleProductFormSubmit(event)}
-          className={styles['form']}>
-            
-            <div className={styles.form__item}>
-              <Form.Control onChange={(event: ChangeEvent<HTMLInputElement>) => {setProductTitleValue(event.target.value)}} value={productTitleValue} className={styles.form__input} type="text" placeholder="Название блюда*" />
-            </div>
-            <div className={styles.form__item}>
-              <Form.Control onChange={(event: ChangeEvent<HTMLInputElement>) => {setProductPriceValue(event.target.value); isNaN(Number(event.target.value)) ? setIsValid(false) : setIsValid(true)}} value={productPriceValue} className={styles.form__input} type="text" placeholder="Стоимость*" />
-            </div>
-            <div className={styles.form__item}>
-              <Form.Control
-                as="textarea"
-                onChange={(event: ChangeEvent<HTMLTextAreaElement>) => setProductInfoValue(event.target.value)}
-                value={productInfoValue}
-                className={styles.form__textarea}
-                placeholder="Описание*"
-                style={{borderColor: '#f6881b'}}
-              />
-            </div>
-            <Button style={{backgroundColor: '#f6881b'}} disabled={productTitleValue && productPriceValue && productInfoValue && isValid ? false : true} type='submit'>Сохранить</Button>
-          </Form>
-        </ModalWindow> */}
-
         <ModalWindow handleBackdropClick={() => setIsDeleteModalWindowOpened(false)} active={isDeleteModalWindowOpened} className={styles.modal}>
           <h3 className={styles.modal__title}>Вы уверены, что хотите удалить?</h3>
           <div className={styles['modal__delete-btns']}>
@@ -319,14 +265,6 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
             <Button onClick={() => setIsDeleteModalWindowOpened(false)} className={styles.modal__btn}>Отмена</Button>
           </div>
         </ModalWindow>
-
-        {/* <ModalWindow handleBackdropClick={() => setIsDeleteModalWindowOpened(false)} active={isDeleteModalWindowOpened} className={styles.modal}>
-          <h3 className={styles.modal__title}>Вы уверены, что хотите удалить данную комнату?</h3>
-          <div className={styles['modal__delete-btns']}>
-            <Button onClick={() => {deleteSubscription()}} className={styles.modal__btn}>Подтвердить</Button>
-            <Button onClick={() => setIsDeleteModalWindowOpened(false)} className={styles.modal__btn}>Закрыть</Button>
-          </div>
-        </ModalWindow> */}
 
         <ModalWindow handleBackdropClick={() => {setIsImageModalWindowOpened(false); setSelectedImage(null)}} active={isImageModalWindowOpened } className={styles.modal}>
           <h3 style={{color: '#f6881b'}} className={styles.modal__title}>Выберите картинку</h3>
