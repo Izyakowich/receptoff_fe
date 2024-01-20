@@ -158,7 +158,11 @@ const getCurrentApplication = async (id: number) => {
     <div className='app'>
       <HashRouter>
           <Routes>
-              <Route path='/' element={<ProductsPage/>}/>
+          <Route
+          path="/"
+          element={<Navigate to="/products/" replace />}
+        />
+              {/* <Route path='/' element={<ProductsPage/>}/> */}
               <Route path="/products/" element={<ProductsPage />} />
               {isAuth && user.isSuperuser && <Route path="/products/admin/" element={<AdminProductsPage />} />}
               {isAuth && user.isSuperuser && <Route path="/applications/" element={<AdminApplicationsPage />} />}

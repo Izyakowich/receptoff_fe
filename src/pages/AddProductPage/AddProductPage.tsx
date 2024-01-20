@@ -97,13 +97,13 @@ const AddProductPage: React.FC = () => {
   };
 
   return (
-    
+    <div className={styles['main__page']}>
+    <Header />
+    <div className={styles['main__page-wrapper']}>
+      <BreadCrumbs />
+      </div>
     <div className={styles.container}>
-      <Header />
-      {/* <div className={styles['admin__page-wrapper']}> */}
-
-      <BreadCrumbs/>
-
+      
       <div className={styles.formContainer}>
         <h1>Добавление услуги</h1>
         <form onSubmit={handleFormSubmit}>
@@ -145,7 +145,7 @@ const AddProductPage: React.FC = () => {
         </form>
       </div>
       </div>
-    // </div>
+      </div>
   );
 };
 

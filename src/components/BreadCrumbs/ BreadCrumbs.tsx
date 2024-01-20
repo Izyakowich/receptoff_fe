@@ -48,7 +48,7 @@ const BreadCrumbs = () => {
       if (crumb == "application") crumb = "Заказ"
       if (crumb == "options-list") crumb = "Список опций"
 
-      if (crumb == "products") crumb = "Главная"
+      if (crumb == "products") crumb = "Блюда"
       if (crumb == "admin") crumb = "Управление блюдами"
       if (crumb == "add") crumb = "Добавление блюда"
       if (crumb == "edit") crumb = "Редактирование блюда"
@@ -65,9 +65,9 @@ const BreadCrumbs = () => {
 
   return (
     <div className={styles.breadcrumbs}>
-      <div className={styles.crumb}>
+      {/* <div className={styles.crumb}>
         <Link to={"/"}>Главная</Link>
-      </div>
+      </div> */}
       {crumbs}
     </div>
   )

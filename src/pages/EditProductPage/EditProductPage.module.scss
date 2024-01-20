@@ -65,3 +65,12 @@
     flex-direction: column;
     gap: 1rem; /* Adjust the gap as per your design */
   }
+
+
+.main__page {
+    &-wrapper {
+        padding-top: 90px;
+        max-width: 1240px;
+        margin: 0 auto;
+    }
+  }

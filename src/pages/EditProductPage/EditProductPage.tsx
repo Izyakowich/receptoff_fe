@@ -157,9 +157,13 @@ useEffect(() => {
     await putProduct(parseInt(id ?? ''));
   };
   return (
+    <div className={styles['main__page']}>
+    <Header />
+    <div className={styles['main__page-wrapper']}>
+      <BreadCrumbs />
+      </div>
     <div className={styles.container}>
-      <Header/>
-      <BreadCrumbs/>
+      
       <div className={styles.formContainer}>
         <h1>Редактирование</h1>
         <form onSubmit={handleFormSubmit}>
@@ -233,6 +237,7 @@ useEffect(() => {
         Сохранить
       </Button>
     </ModalWindow>
+  </div>
   </div>
   );
 };

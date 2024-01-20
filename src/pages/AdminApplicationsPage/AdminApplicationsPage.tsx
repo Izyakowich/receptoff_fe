@@ -2,15 +2,24 @@ import React, {ChangeEvent, useState} from 'react'
 import axios from 'axios'
 import styles from './AdminApplicationsPage.module.scss'
 import Header from 'components/Header'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useApplications, setApplicationsAction } from 'Slices/ApplicationsSlice'
 import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
 import { Dropdown } from 'react-bootstrap'
 import BreadCrumbs from 'components/BreadCrumbs'
 import ArrowDownIcon from 'components/Icons/ArrowDownIcon'
 import AdminApplicationsTable from 'components/AdminApplicationsTable'
 import { useLinksMapData, setLinksMapDataAction } from 'Slices/DetailedSlice'
+// import { useStartDate, useEndDate, useEmailValue, useStatusValue, setStartDateAction, setEndDateAction, setEmailValueAction, setStatusValueAction } from 'Slices/FilterSlice';
+import {
+  setAppValueAction,
+  setAppDropdownValueNameAction,
+  setAppDropdownValueIdAction,
+  useInputValue,
+} from "Slices/FilterSlice"
+import { RootState } from '@reduxjs/toolkit/query'
+
+// import {UserData} from 'Slices/AuthSlice'
 
 // import { useEmailValue, setEmailValueAction } from "../../Slices/MainSlice";
 
@@ -48,6 +57,39 @@ const AdminApplicationsPage = () => {
   // const emailValue = useEmailValue()
   const [emailValue, setEmailValue] = useState('')
 
+  // const startDate = useStartDate();
+  // const endDate = useEndDate();
+  // const emailValue = useEmailValue();
+  // const statusValue = useStatusValue();
+
+  // const handleStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(setStartDateAction(event.target.value));
+  // };
+
+  // const handleEndDateChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(setEndDateAction(event.target.value));
+  // };
+
+  // const handleEmailChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(setEmailValueAction(event.target.value));
+  // };
+  
+  // const handleStatusChange = (event: ChangeEvent<HTMLInputElement>) => {
+  //   dispatch(setStatusValueAction(event.target.value));
+  // };
+
+  const searchValue = useInputValue()
+  
+  // const selectedStatus = useSelector(
+  //   (state: RootState) => state.moderApp.dropdown_value.id
+  // )
+  // const searchValue = useSelector(
+  //   (state: RootState) => state.moderApp.input_value
+  // )
+  // const categoryValue = useSelector(
+  //   (state: RootState) => state.moderApp.dropdown_value
+  // )
+
   const getAllApplications = async () => {
     let res = ''
     if (startTime && endTime) {
@@ -63,6 +105,20 @@ const AdminApplicationsPage = () => {
     } else if (res.length !== 0 && statusValue !== 'Все'){
       res += `&status=${statusValue}`
     }
+
+    // if (startDate && endDate) {
+    //   res += `?start=${startDate}&end=${endDate}`;
+    // } else if (startDate) {
+    //   res += `?start=${startDate}`;
+    // } else if (endDate) {
+    //   res += `?end=${endDate}`;
+    // }
+
+    // if (res.length === 0 && statusValue !== 'Все') {
+    //   res += `?status=${statusValue}`;
+    // } else if (res.length !== 0 && statusValue !== 'Все') {
+    //   res += `&status=${statusValue}`;
+    // }
 
     try {
       const response = await axios(`http://localhost:8000/applications/${res}`, {
@@ -82,7 +138,7 @@ const AdminApplicationsPage = () => {
     }));
 
     dispatch(setApplicationsAction(newArr.filter((application: ApplicationData) => {
-      return application.userEmail ? application.userEmail.includes(emailValue) : false;
+      return application.userEmail ? application.userEmail.includes(searchValue) : false;
     })));
 
     } catch(error) {
@@ -143,6 +199,8 @@ React.useEffect(() => {
               <Form.Control 
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
                   setStartTime(event.target.value);
+                  // handleStartDateChange(event);
+
                 }} 
                 value={startTime} 
                 className={styles.form__input} 
@@ -155,6 +213,8 @@ React.useEffect(() => {
               <Form.Control 
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
                   setEndTime(event.target.value);
+                  // handleEndDateChange(event);
+
                 }} 
                 value={endTime} 
                 className={styles.form__input} 
@@ -194,9 +254,10 @@ React.useEffect(() => {
                 Заказчик
               <Form.Control 
                 onChange={(event: ChangeEvent<HTMLInputElement>) => {
-                  setEmailValue(event.target.value);
+                  setAppValueAction(event.target.value);
+                  // handleEmailChange(event);
                 }} 
-                value={emailValue} 
+                value={searchValue} 
                 className={styles.form__input} 
                 type="text" 
                 placeholder="Введите E-mail заказчика" 

@@ -146,7 +146,7 @@ const SelectedApplicationPage = () => {
                 <div>
                   {!flag ? <>
                     
-                  <ProductsTable flag={false} products={currentProduct} className={styles['application__page-table']}/>
+                  <ProductsTable flag={isCard ? false : true} products={currentProduct} className={styles['application__page-table']}/>
                   <div className={styles['application__page-info-btns']}>
                   {isCard && 
                     <Button onClick={() => handleSendButtonClick()} className={styles['application__page-info-btn']}>Отправить</Button>
