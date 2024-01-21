@@ -6,12 +6,12 @@ import OneCard from 'components/Card';
 import styles from './MainPage.module.scss'
 import { useEffect, useState } from 'react';
 import { ChangeEvent } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
+// import Dropdown from 'react-bootstrap/Dropdown';
 // import { Link } from 'react-router-dom';
 // import SliderFilter from 'components/Slider';
 import BreadCrumbs from 'components/BreadCrumbs';
 
-import { categories, mockProducts } from '../../../consts';
+import { mockProducts } from '../../../consts';
 
 export type Product = {
     id: number,
@@ -38,7 +38,7 @@ export type ReceivedProductData = {
 
 const MainPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
-    const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
+    // const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
     const [titleValue, setTitleValue] = useState<string>('')
 
     const linksMap = new Map<string, string>([
@@ -47,16 +47,16 @@ const MainPage: React.FC = () => {
 
     const fetchProducts = async () => {
         let url = 'http://127.0.0.1:8000/products'
-        if (titleValue) {
-            url += `?title=${titleValue}`
-            if (categoryValue && categoryValue !== 'Все категории') {
-                url += `&category=${categoryValue}`
-            }
+        // if (titleValue) {
+        //     url += `?title=${titleValue}`
+        //     if (categoryValue && categoryValue !== 'Все категории') {
+        //         url += `&category=${categoryValue}`
+        //     }
 
-        } else if(categoryValue && categoryValue !== 'Все категории') {
-            url += `?category=${categoryValue}`
+        // } else if(categoryValue && categoryValue !== 'Все категории') {
+        //     url += `?category=${categoryValue}`
 
-         } 
+        //  } 
   
         try {
             const response = await fetch(url, {
@@ -111,14 +111,14 @@ const MainPage: React.FC = () => {
         event.preventDefault();
     };
 
-    const handleCategorySelect = (eventKey: string | null) => {
-        if (eventKey) {
-          const selectedCategory = categories.find(category => category.key === eventKey);
-          if (selectedCategory) {
-            setCategoryValue(selectedCategory.value);
-          }
-        }
-    };
+    // const handleCategorySelect = (eventKey: string | null) => {
+    //     if (eventKey) {
+    //       const selectedCategory = categories.find(category => category.key === eventKey);
+    //       if (selectedCategory) {
+    //         setCategoryValue(selectedCategory.value);
+    //       }
+    //     }
+    // };
 
     return (
         <div className={styles['main__page']}>
