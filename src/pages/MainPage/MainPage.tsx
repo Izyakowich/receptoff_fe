@@ -40,8 +40,7 @@ const MainPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
     const [titleValue, setTitleValue] = useState<string>('')
-    // const [priceValue, setPriceValue] = useState<number>()
-    // const [sliderValues, setSliderValues] = useState([0, 1000]);
+
     const linksMap = new Map<string, string>([
         ['Продукты', '/']
     ]);
@@ -53,18 +52,12 @@ const MainPage: React.FC = () => {
             if (categoryValue && categoryValue !== 'Все категории') {
                 url += `&category=${categoryValue}`
             }
-            // if (priceValue) {
-            //     url += `&max_price=${priceValue}`
-            // }
+
         } else if(categoryValue && categoryValue !== 'Все категории') {
             url += `?category=${categoryValue}`
-            // if (priceValue) {
-            //     url += `&max_price=${priceValue}`
-            // }
+
          } 
-        // else if (priceValue){
-        //     url += `?max_price=${priceValue}`
-        // }
+  
         try {
             const response = await fetch(url, {
                 credentials: 'include'
@@ -83,10 +76,10 @@ const MainPage: React.FC = () => {
         }
         catch {
             console.log('запрос не прошел !')
-            if (categoryValue && categoryValue !== 'Все категории') {
-                const filteredArray = mockProducts.filter(mockProducts => mockProducts.categoryTitle === categoryValue);
-                setProducts(filteredArray);
-            } else if (titleValue) {
+            // if (categoryValue && categoryValue !== 'Все категории') {
+            //     const filteredArray = mockProducts.filter(mockProducts => mockProducts.categoryTitle === categoryValue);
+            //     setProducts(filteredArray);
+            if (titleValue) {
                 const filteredArray = mockProducts.filter(mockProducts => mockProducts.title.includes(titleValue));
                 setProducts(filteredArray);
             }
@@ -113,13 +106,6 @@ const MainPage: React.FC = () => {
         setTitleValue(event.target.value);
     };
 
-    // const handlePriceValueChange = (event: ChangeEvent<HTMLInputElement>) => {
-    //     setPriceValue(Number(event.target.value));
-    // };
-
-    // const handleSliderChange = (values: number[]) => {
-    //     // setSliderValues(values);
-    // };
 
     const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -150,7 +136,7 @@ const MainPage: React.FC = () => {
                             <Form.Control style={{height: '100%', borderColor: '#3D348B', fontSize: 18}} value={titleValue} onChange={handleTitleValueChange} type="text" placeholder="Введите название блюда..." />
                         </Form.Group>
                         <div style={{display: 'flex', gap: 10, width: '100%', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-                            <Dropdown style={{minWidth: '40%'}} onSelect={handleCategorySelect}>
+                            {/* <Dropdown style={{minWidth: '40%'}} onSelect={handleCategorySelect}>
                                 <Dropdown.Toggle
                                     style={{
                                     height: 60,
@@ -176,7 +162,7 @@ const MainPage: React.FC = () => {
                                         <Dropdown.Item key={category.key} eventKey={category.key}>{category.value}</Dropdown.Item>
                                     ))}
                                 </Dropdown.Menu>
-                            </Dropdown>
+                            </Dropdown> */}
                             {/* <SliderFilter
                                 onChangeValues={handleSliderChange}
                                 minimum={0}
