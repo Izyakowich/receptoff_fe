@@ -1,10 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
 
-// interface CategoryData {
-//   id: number;
-//   title: string;
-// }
 
 interface ProductData {
   id: number;
@@ -19,7 +15,6 @@ interface DataState {
   products: ProductData[];
   priceValues: number[];
   isMainPage: boolean;
-  // emailValue: string;
   isProductsLoading: boolean;
 
 }
@@ -32,7 +27,6 @@ const dataSlice = createSlice({
     priceValues: [0, 10000],
     isMainPage: false,
     isProductsLoading: false,
-    // emailValue: ''
 
   } as DataState,
   reducers: {
@@ -77,16 +71,11 @@ export const useIsMainPage = () =>
 export const useIsProductsLoading = () =>
   useSelector((state: { mainData: DataState }) => state.mainData.isProductsLoading);
 
-// export const useEmailValue = () =>
-//   useSelector((state: { mainData: DataState }) => state.mainData.emailValue);
 
-
-// Action, который будем применять в различных обработках
 export const {
   
 
     setTitleValue: setTitleValueAction,
-    // setEmailValue: setEmailValueAction,
     setProducts: setProductsAction,
     setPriceValues: setPriceValuesAction,
     setIsMainPage: setIsMainPageAction,

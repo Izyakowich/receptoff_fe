@@ -105,10 +105,10 @@ const AddProductPage: React.FC = () => {
     <div className={styles.container}>
       
       <div className={styles.formContainer}>
-        <h1>Добавление услуги</h1>
+        <h1>Добавление продуктов</h1>
         <form onSubmit={handleFormSubmit}>
           <div>
-            <label htmlFor="title">Название услуги:</label>
+            <label htmlFor="title">Название продуктов:</label>
             <input
               className={styles.input}
               id="title"

@@ -8,8 +8,6 @@ import OneCard from 'components/Card';
 import styles from './ProductsPage.module.scss'
 import { ChangeEvent } from 'react';
 import ApplicationIcon from 'components/Icons/ApplicationIcon';
-import Dropdown from 'react-bootstrap/Dropdown';
-import SliderFilter from 'components/Slider';
 import BreadCrumbs from 'components/BreadCrumbs';
 import Loader from 'components/Loader';
 import { toast } from 'react-toastify';
@@ -175,7 +173,6 @@ const ProductsPage: React.FC = () => {
 
     const handleClick = (id: number) => {
         navigate(`/applications/${id}/`, { state: { flag: false } });
-        // navigate(`/application/`, { state: { flag: false } });
     };
 
 
@@ -218,9 +215,7 @@ const ProductsPage: React.FC = () => {
                     <Loader className={styles.loader} size='l' />
                  </div>
                  : <div className={styles["main__page-cards"]}>
-                    {/* {products.map((product: product) => (
-                        <OneCard id={product.id} src={product.src} onButtonClick={() => postProductToApplication(product.id)} title={product.title} price={Number(product.price)}></OneCard>
-                    ))} */}
+                    
                     </div>
                  }
             </div>
