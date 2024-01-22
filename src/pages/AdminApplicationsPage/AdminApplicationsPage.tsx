@@ -9,9 +9,6 @@ import { Dropdown } from 'react-bootstrap'
 import BreadCrumbs from 'components/BreadCrumbs'
 import ArrowDownIcon from 'components/Icons/ArrowDownIcon'
 import AdminApplicationsTable from 'components/AdminApplicationsTable'
-import { useLinksMapData, setLinksMapDataAction } from 'Slices/DetailedSlice'
-// import { setAppValueAction, setAppDropdownValueNameAction, setAppDropdownValueIdAction, useInputValue, useStatusValue } from "Slices/FilterSlice"
-import { RootState } from 'Slices/Store'
 
 import {
   setSearchTerm,
@@ -102,7 +99,7 @@ const AdminApplicationsPage = () => {
       throw error
     }
   }
-//##############
+
 const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
   dispatch(setSearchTerm(event.target.value));
 };
@@ -118,16 +115,12 @@ const handleStartDateChange = (event: ChangeEvent<HTMLInputElement>) => {
 const handleEndDateChange = (event: ChangeEvent<HTMLInputElement>) => {
   dispatch(setEndDate(event.target.value));
 };
-//###############
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     getAllApplications()
   }
 
-  // const handleTitleValueChange = (event: ChangeEvent<HTMLInputElement>)  => { //имейл 
-  //   dispatch(setAppValueAction(event.target.value))
-  // }
   
   const handleCategorySelect = (eventKey: string | null) => {
     if (eventKey !== null) {

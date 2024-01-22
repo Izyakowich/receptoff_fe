@@ -48,9 +48,6 @@ const dataSlice = createSlice({
     setIsProductsLoading(state, action: PayloadAction<boolean>) {
       state.isProductsLoading = action.payload
     },
-    // setEmailValue(state, action: PayloadAction<string>) {
-    //   state.emailValue = action.payload
-    // }
   },
 });
 

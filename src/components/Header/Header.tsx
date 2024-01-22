@@ -1,10 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
-import { Link, Route, useLocation, useNavigate, Routes } from 'react-router-dom'
+import { Link, Route, useNavigate, Routes } from 'react-router-dom'
 import styles from './Header.module.scss'
-import ProfileIcon from 'components/Icons/ProfileIcon';
-import ApplicationIcon from 'components/Icons/ApplicationIcon';
-import ProfileWindow from "components/ProfileWindow";
 import BurgerIcon from 'components/Icons/BurgerIcon';
 import { motion, AnimatePresence } from "framer-motion";
 import axios, {AxiosResponse} from 'axios';
@@ -13,21 +10,21 @@ import {useUser, useIsAuth, setIsAuthAction, setUserAction} from "../../Slices/A
 import Cookies from "universal-cookie";
 import { toast } from 'react-toastify';
 import { useApplications, useProductsFromApplication } from 'Slices/ApplicationsSlice';
-import { Button } from 'react-bootstrap';
 import { useIsMainPage } from 'Slices/MainSlice';
 import BasketIcon from 'components/Icons/BasketIcon';
 import ProductsPage from 'pages/ProductsPage';
 import AdminProductsPage from 'pages/AdminProductsPage';
+import { resetFilters } from 'Slices/FilterSlice';
+import { setTitleValueAction, setProductsAction, setIsMainPageAction } from 'Slices/MainSlice';
 
 const cookies = new Cookies();
 
 const Header: React.FC = () => {
-    const location = useLocation();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [isProfileButtonClicked, setIsProfileButtonClicked] = useState(false);
     const [isBurgerMenuOpened, setIsBurgerMenuOpened] = useState(false)
     const isUserAuth = useIsAuth();
-    const navigate = useNavigate();
     const productsFromApplications = useProductsFromApplication();
     const applications = useApplications();
     let user = useUser();
@@ -54,10 +51,12 @@ const Header: React.FC = () => {
             dispatch(setIsAuthAction(false))
             dispatch(setUserAction({
                 email: "",
-                // fullname: "",
-                // phoneNumber: "",
                 isSuperuser: false
             }))
+            dispatch(resetFilters())
+            dispatch(setTitleValueAction(''))
+
+            navigate("/")
             setIsProfileButtonClicked(false);
             toast.success("Вы вышли из аккаунта");
         }
