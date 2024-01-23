@@ -70,19 +70,11 @@ const MainPage: React.FC = () => {
         }
         catch(error) {
             console.log('запрос не прошел !', error)
-            // херня в ифах, вдуплить зачем они нужны
             if (titleValue) {
                 const filteredArray = mockProducts.filter(mockProducts => mockProducts.title.includes(titleValue));
                 setProducts(filteredArray);
             }
-            // } else if (categoryValue && categoryValue !== 'Все категории') {
-            //     const filteredArray = mockProducts.filter(mockProducts => mockProducts.categoryTitle === categoryValue);
-            //     setProducts(filteredArray);
-            // } 
-            // } else if (priceValue) {
-            //     const filteredArray = mockProducts.filter(mockProducts => mockProducts.price <= priceValue);
-            //     setProducts(filteredArray);
-            // }
+
             
             else {
                 setProducts(mockProducts);
