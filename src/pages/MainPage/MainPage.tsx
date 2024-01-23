@@ -20,7 +20,6 @@ export type Product = {
     info: string,
     src: string,
     idCategory: number,
-    categoryTitle: string,
     status: string
 }
 
@@ -30,8 +29,6 @@ export type ReceivedProductData = {
     price: number,
     info: string,
     src: string,
-    id_category: number,
-    category: string,
 }
 
 
@@ -59,7 +56,6 @@ const MainPage: React.FC = () => {
                 price: raw.price,
                 info: raw.info,
                 src: raw.src,
-                categoryTitle: raw.category
             }));
         
             setProducts(newRecipesArr);
@@ -119,12 +115,12 @@ const MainPage: React.FC = () => {
                         
                     </div>
                     
-                    <Button style={{backgroundColor: "#2787F5", padding: "15px 40px", borderColor: "#000", fontSize: 18, height: 60}} onClick={() => handleSearchButtonClick()}>Найти</Button>
+                    <Button style={{backgroundColor: "#f6881b", padding: "15px 40px", borderColor: "#000", fontSize: 18, height: 60}} onClick={() => handleSearchButtonClick()}>Найти</Button>
                 </Form>
 
                 <div className={styles["content__cards"]}>
                     { products.map((product: Product) => (
-                        <OneCard id={product.id} src={product.src} onButtonClick={() => console.log('add to application')} title={product.title} category={product.categoryTitle} price={Number(product.price)}></OneCard>
+                        <OneCard id={product.id} src={product.src} onButtonClick={() => console.log('add to application')} title={product.title} price={Number(product.price)}></OneCard>
                     ))}
                 </div>
             </div>

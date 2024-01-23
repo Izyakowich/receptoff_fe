@@ -32,7 +32,7 @@ const OneCard: React.FC<CardProps> = ({id, title, category, price, src, onButton
         <Card.Subtitle>Категория: {category}</Card.Subtitle>
         <Card.Text>Цена: {price}р.</Card.Text>
         <div className='mt-auto w-100' style={{position: 'relative', height: 60}}>
-          <Button style={{ backgroundColor: '#2787F5', padding: '15px 30px', borderColor: "#000", position: 'absolute', right: 0, marginBottom: 50, fontSize: 18 }} onClick={onButtonClick} variant="primary">Добавить</Button>
+          <Button style={{ backgroundColor: '#f6881b', padding: '15px 30px', borderColor: "#000", position: 'absolute', right: 0, marginBottom: 50, fontSize: 18 }} onClick={onButtonClick} variant="primary">Добавить</Button>
         </div>
       </Card.Body>
     </Card>
