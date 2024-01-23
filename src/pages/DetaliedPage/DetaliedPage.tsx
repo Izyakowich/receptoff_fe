@@ -39,9 +39,7 @@ const MainPage: React.FC = () => {
     );
 
     const [product, setProduct] = useState<Product>();
-    // const linksMap = new Map<string, string>([
-    //     ['Абонементы', '/']
-    // ]);
+
     let currentUrl = '/'
 
     const fetchProduct = async () => {
@@ -57,7 +55,7 @@ const MainPage: React.FC = () => {
                 categoryTitle: jsonData.category
             })
 
-            const newLinksMap = new Map<string, string>(linksMap); // Копирование старого Map
+            const newLinksMap = new Map<string, string>(linksMap); 
             newLinksMap.set(jsonData.title, '/product/' + id);
             setLinksMap(newLinksMap)
         } catch {

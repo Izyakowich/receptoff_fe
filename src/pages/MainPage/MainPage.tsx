@@ -38,7 +38,6 @@ export type ReceivedProductData = {
 
 const MainPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
-    // const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
     const [titleValue, setTitleValue] = useState<string>('')
 
     const linksMap = new Map<string, string>([
@@ -47,16 +46,7 @@ const MainPage: React.FC = () => {
 
     const fetchProducts = async () => {
         let url = 'http://127.0.0.1:8000/products'
-        // if (titleValue) {
-        //     url += `?title=${titleValue}`
-        //     if (categoryValue && categoryValue !== 'Все категории') {
-        //         url += `&category=${categoryValue}`
-        //     }
-
-        // } else if(categoryValue && categoryValue !== 'Все категории') {
-        //     url += `?category=${categoryValue}`
-
-        //  } 
+        
   
         try {
             const response = await fetch(url, {
@@ -76,17 +66,12 @@ const MainPage: React.FC = () => {
         }
         catch {
             console.log('запрос не прошел !')
-            // if (categoryValue && categoryValue !== 'Все категории') {
-            //     const filteredArray = mockProducts.filter(mockProducts => mockProducts.categoryTitle === categoryValue);
-            //     setProducts(filteredArray);
+
             if (titleValue) {
                 const filteredArray = mockProducts.filter(mockProducts => mockProducts.title.includes(titleValue));
                 setProducts(filteredArray);
             }
-            // } else if (priceValue) {
-            //     const filteredArray = mockProducts.filter(mockProducts => mockProducts.price <= priceValue);
-            //     setProducts(filteredArray);
-            // }
+
             
             else {
                 setProducts(mockProducts);
@@ -111,14 +96,7 @@ const MainPage: React.FC = () => {
         event.preventDefault();
     };
 
-    // const handleCategorySelect = (eventKey: string | null) => {
-    //     if (eventKey) {
-    //       const selectedCategory = categories.find(category => category.key === eventKey);
-    //       if (selectedCategory) {
-    //         setCategoryValue(selectedCategory.value);
-    //       }
-    //     }
-    // };
+
 
     return (
         <div className={styles['main__page']}>
@@ -136,39 +114,7 @@ const MainPage: React.FC = () => {
                             <Form.Control style={{height: '100%', borderColor: '#3D348B', fontSize: 18}} value={titleValue} onChange={handleTitleValueChange} type="text" placeholder="Введите название блюда..." />
                         </Form.Group>
                         <div style={{display: 'flex', gap: 10, width: '100%', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-                            {/* <Dropdown style={{minWidth: '40%'}} onSelect={handleCategorySelect}>
-                                <Dropdown.Toggle
-                                    style={{
-                                    height: 60,
-                                    borderColor: '#3D348B',
-                                    backgroundColor: "#fff",
-                                    color: '#000',
-                                    width: '100%',
-                                    textAlign: 'left',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    paddingRight: '1rem',
-                                    fontSize: 18
-                                    }}
-                                    variant="success"
-                                    id="dropdown-basic"
-                                >
-                                    {categoryValue}
-                                    <i className="bi bi-chevron-down"></i>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu style={{width: '100%', textAlign: 'left',}}>
-                                    {categories.map(category => (
-                                        <Dropdown.Item key={category.key} eventKey={category.key}>{category.value}</Dropdown.Item>
-                                    ))}
-                                </Dropdown.Menu>
-                            </Dropdown> */}
-                            {/* <SliderFilter
-                                onChangeValues={handleSliderChange}
-                                minimum={0}
-                                maximum={1000}
-                                title="Диапазон цен:"
-                            /> */}
+            
                         </div>
                         
                     </div>
