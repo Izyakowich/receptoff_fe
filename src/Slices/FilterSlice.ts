@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from './Store'; // Предполагаем, что store вашего приложения называется 'store.ts'
+import { RootState } from './Store'; 
 
 interface FilterState {
   searchTerm: string;

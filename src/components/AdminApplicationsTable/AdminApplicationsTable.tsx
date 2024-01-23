@@ -153,7 +153,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
   const handleDetailedButtonClick = (id: number) => {
     // getCurrentApplication(id)
     setIsModalWindowOpened(true)
-    navigate(`/applications/detailed/${id}/`); // Assuming the route for CurrentApplicationPage is '/applications/:id'
+    navigate(`/applications/detailed/${id}/`); 
   };
 
   const handleAcceptButtonClick = (id: number) => {
@@ -181,6 +181,7 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
             <th>Дата создания</th>
             <th>Дата формирования</th>
             <th>Дата завершения</th>
+            <th>Готовность</th>
             <th>Действие</th>
           </tr>
         </thead>
@@ -196,6 +197,8 @@ const AdminApplicationsTable: React.FC<ProductsTableProps> = ({className}) => {
               <td>{application.creationDate}</td>
               <td>{application.publicationDate ? application.publicationDate : '-'}</td>
               <td>{application.approvingDate ? application.approvingDate : '-'}</td>
+              <td>{application.readyStatus==false ? "Не готово" : "Готово"}</td>
+
               <td className={styles.table__action}>
                 
                   <Button style={{backgroundColor: '#f6881b'}} onClick={() => handleDetailedButtonClick(application.id)}>Подробнее</Button>

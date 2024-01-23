@@ -71,14 +71,8 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
     }
   }
 
-  // const handleDetailedButtonClick = (id: number) => {
-  //   getCurrentApplication(id);
-  //   setIsModalWindowOpened(true)
-  // };
-
   const handleDetailedButtonClick = (id: number) => {
-    // Modify the function to navigate to the CurrentApplicationPage route
-    navigate(`/detailed/${id}/`); // Assuming the route for CurrentApplicationPage is '/applications/:id'
+    navigate(`/detailed/${id}/`); 
   };
 
   return (
@@ -105,7 +99,7 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
               <td>{application.creationDate}</td>
               <td>{application.publicationDate ? application.publicationDate : '-'}</td>
               <td>{application.approvingDate ? application.approvingDate : '-'}</td>
-              <td>{application.readyStatus==false ? "Готовится" : "Готово"}</td>
+              <td>{application.readyStatus==false ? "Не готово" : "Готово"}</td>
               <td className={styles.table__action}>
                 
                 <Link to={`/applications/${application.id}/`}>
@@ -118,19 +112,6 @@ const ApplicationsTable: React.FC<ProductsTableProps> = ({applications, classNam
       </Table>
     </div>
 
-      {/* <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
-      <h3 className={styles.modal__title}>Добавленные блюда</h3>
-      <div className={styles.modal__list}>
-        {currentProducts.map((product: ProductData, index: number) => (
-          <div className={styles['modal__list-item']}>
-            <div className={styles['modal__list-item-title']}>
-            <b>{product.title}</b>
-            </div>
-            <b>{product.price} ₽</b>
-          </div>
-        ))}
-      </div>
-      </ModalWindow> */}
     </>
   );
 }
