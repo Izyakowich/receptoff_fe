@@ -6,12 +6,12 @@ import OneCard from 'components/Card';
 import styles from './MainPage.module.scss'
 import { useEffect, useState } from 'react';
 import { ChangeEvent } from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
+// import Dropdown from 'react-bootstrap/Dropdown';
 // import { Link } from 'react-router-dom';
 // import SliderFilter from 'components/Slider';
 import BreadCrumbs from 'components/BreadCrumbs';
 
-import { categories, mockProducts } from '../../../consts';
+import { mockProducts } from '../../../consts';
 
 export type Product = {
     id: number,
@@ -34,7 +34,7 @@ export type ReceivedProductData = {
 
 const MainPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
-    const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
+    // const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
     const [titleValue, setTitleValue] = useState<string>('')
  
     const linksMap = new Map<string, string>([
