@@ -36,8 +36,7 @@ const MainPage: React.FC = () => {
     const [products, setProducts] = useState<Product[]>([]);
     const [categoryValue, setCategoryValue] = useState<string>(categories[0].value)
     const [titleValue, setTitleValue] = useState<string>('')
-    // const [priceValue, setPriceValue] = useState<number>()
-    // const [sliderValues, setSliderValues] = useState([0, 1000]);
+ 
     const linksMap = new Map<string, string>([
         ['Продукты', '/']
     ]);
@@ -115,14 +114,7 @@ const MainPage: React.FC = () => {
         event.preventDefault();
     };
 
-    const handleCategorySelect = (eventKey: string | null) => {
-        if (eventKey) {
-          const selectedCategory = categories.find(category => category.key === eventKey);
-          if (selectedCategory) {
-            setCategoryValue(selectedCategory.value);
-          }
-        }
-    };
+    
 
     return (
         <div className={styles['main__page']}>
@@ -137,47 +129,15 @@ const MainPage: React.FC = () => {
                 <Form className="d-flex gap-3" onSubmit={handleFormSubmit}>
                     <div className='w-100'>
                         <Form.Group style={{height: 60}} className='w-100 mb-3' controlId="search__sub.input__sub">
-                            <Form.Control style={{height: '100%', borderColor: '#3D348B', fontSize: 18}} value={titleValue} onChange={handleTitleValueChange} type="text" placeholder="Введите название блюда..." />
+                            <Form.Control style={{height: '100%', borderColor: '#f6881b', fontSize: 18}} value={titleValue} onChange={handleTitleValueChange} type="text" placeholder="Введите название блюда..." />
                         </Form.Group>
                         <div style={{display: 'flex', gap: 10, width: '100%', justifyContent: 'space-between', alignItems: 'flex-end'}}>
-                            <Dropdown style={{minWidth: '40%'}} onSelect={handleCategorySelect}>
-                                <Dropdown.Toggle
-                                    style={{
-                                    height: 60,
-                                    borderColor: '#3D348B',
-                                    backgroundColor: "#fff",
-                                    color: '#000',
-                                    width: '100%',
-                                    textAlign: 'left',
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    paddingRight: '1rem',
-                                    fontSize: 18
-                                    }}
-                                    variant="success"
-                                    id="dropdown-basic"
-                                >
-                                    {categoryValue}
-                                    <i className="bi bi-chevron-down"></i>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu style={{width: '100%', textAlign: 'left',}}>
-                                    {categories.map(category => (
-                                        <Dropdown.Item key={category.key} eventKey={category.key}>{category.value}</Dropdown.Item>
-                                    ))}
-                                </Dropdown.Menu>
-                            </Dropdown>
-                            {/* <SliderFilter
-                                onChangeValues={handleSliderChange}
-                                minimum={0}
-                                maximum={1000}
-                                title="Диапазон цен:"
-                            /> */}
+                            
                         </div>
                         
                     </div>
                     
-                    <Button style={{backgroundColor: "#2787F5", padding: "15px 40px", borderColor: "#000", fontSize: 18, height: 60}} onClick={() => handleSearchButtonClick()}>Найти</Button>
+                    <Button style={{backgroundColor: "#f6881b", padding: "15px 40px", borderColor: "#000", fontSize: 18, height: 60}} onClick={() => handleSearchButtonClick()}>Найти</Button>
                 </Form>
 
                 <div className={styles["content__cards"]}>

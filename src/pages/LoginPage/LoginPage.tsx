@@ -24,12 +24,12 @@ const LoginPage: React.FC = () => {
                     <h3 className={styles.content__title}>Вход</h3>
                     <div className={styles.form__item}>
                         <Form.Group style={{height: 50}} className='w-100 mb-3' controlId="search__sub.input__sub">
-                            <Form.Control style={{height: '100%', borderColor: '#3D348B', fontSize: 18}} type="email" placeholder="E-mail..." />
+                            <Form.Control style={{height: '100%', borderColor: '#f6881b', fontSize: 18}} type="email" placeholder="E-mail..." />
                         </Form.Group>
                     </div>
                     <div className={styles.form__item}>
                         <Form.Group style={{height: 50}} className='w-100 mb-3' controlId="search__sub.input__sub">
-                            <Form.Control style={{height: '100%', borderColor: '#3D348B', fontSize: 18}} type="password" placeholder="Пароль..." />
+                            <Form.Control style={{height: '100%', borderColor: '#f6881b', fontSize: 18}} type="password" placeholder="Пароль..." />
                         </Form.Group>
                     </div>
                     
