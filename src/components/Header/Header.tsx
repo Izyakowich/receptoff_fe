@@ -80,7 +80,7 @@ const Header: React.FC = () => {
                     {isUserAuth && !user.isSuperuser ? 
                     <Link className={styles.header__block} to='/applications/'>Мои заявки</Link>
                     : isUserAuth && <Link className={styles.header__block} to='/applications/'>Заявки</Link>}
-                    <Link className={styles.header__block} to={'/claim/'}>Claim</Link>
+                    {<Link className={styles.header__block} to={'/claim/'}>Жалобы</Link>}
 
                     {/* {!user.isSuperuser &&  <Link className={styles.header__block} to='/'>Поддержка</Link>} */}
                 </div>
@@ -100,14 +100,14 @@ const Header: React.FC = () => {
                     <div className={styles.burger__menu}>
                         <Link className={styles['burger__menu-item']} to={'/products/'}>Блюда</Link>
                         <Link className={styles['burger__menu-item']} to={'/applications/'}>Мои заявки</Link>
-                        <Link className={styles['burger__menu-item']} to={'/claim/'}>Claim</Link>
+                        <Link className={styles['burger__menu-item']} to={'/claim/'}>Жалобы</Link>
                     </div>}
                     {isBurgerMenuOpened && user.isSuperuser &&
                     <div className={styles.burger__menu}>
                         <Link className={styles['burger__menu-item']} to={'/products/'}>Все блюда</Link>
                         <Link className={styles['burger__menu-item']} to={'/admin/'}>Управление</Link>
                         <Link className={styles['burger__menu-item']} to={'/applications/'}>Заявки</Link>
-                        <Link className={styles['burger__menu-item']} to={'/claim/'}>Claim</Link>
+                        <Link className={styles['burger__menu-item']} to={'/claim/'}>Жалобы</Link>
                     </div>
                     }
                 </div>

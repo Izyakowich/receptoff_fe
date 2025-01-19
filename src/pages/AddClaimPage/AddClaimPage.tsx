@@ -1,101 +1,127 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState, useEffect } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, TextField, Card, CardContent, CardHeader, Typography, Badge } from '@mui/material';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import './AddClaimPage.module.scss';
+import axios from 'axios';
+import { setClaimAction } from 'Slices/ClaimSlice';
+import { useDispatch } from 'react-redux';
+import Header from 'components/Header';
 
-// Define types using zod
+// Типы данных
+type ClaimData = {
+  id: number;
+  titleClaim: string;
+  textClaim: string;
+  publicationDate: string;
+  approvingDate: string;
+  status: string;
+};
+
+export type ReceivedClaimData = {
+  id: number;
+  title_claim: string;
+  text_claim: string;
+  publication_date: string;
+  approving_date: string;
+  status: string;
+};
+
 const UserRole = z.enum(['unauthorized', 'user']);
-const ComplaintStatus = z.enum(['pending', 'in_review', 'resolved', 'rejected']);
-const Complaint = z.object({
-  id: z.string(),
-  title: z.string(),
-  description: z.string(),
-  status: ComplaintStatus,
-  createdAt: z.string(),
-  userId: z.string(),
-  moderatorNotes: z.string().optional(),
-});
-
 type UserRole = z.infer<typeof UserRole>;
-type ComplaintStatus = z.infer<typeof ComplaintStatus>;
-type Complaint = z.infer<typeof Complaint>;
-
-// Mock complaints data
-const mockComplaints: Complaint[] = [
-  {
-    id: '1',
-    title: 'Service Issue',
-    description: 'Having problems with...',
-    status: 'pending',
-    createdAt: '2024-02-20T10:00:00Z',
-    userId: 'user1',
-  },
-];
-
-interface ComplaintFormData {
-  title: string;
-  description: string;
-}
 
 interface AddClaimPageProps {
   isAuth: boolean;
-  user: any; // Replace 'any' with the actual type of your user object
+  user: any; // Типизируйте пользователя, если возможно
+}
+
+interface FormData {
+  titleClaim: string;
+  textClaim: string;
 }
 
 const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
-  const [complaints, setComplaints] = useState<Complaint[]>(mockComplaints);
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<ComplaintFormData>();
+  const dispatch = useDispatch();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>();
+  const [currentClaim, setClaim] = useState<ClaimData[]>([]);
 
-  const onSubmit = (data: ComplaintFormData) => {
-    const newComplaint: Complaint = {
-      id: Math.random().toString(36).substr(2, 9),
-      ...data,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      userId: 'user1',
-    };
-    setComplaints(prev => [newComplaint, ...prev]);
-    toast.success('Жалоба успешно отправлена');
-    reset();
+  const getAllClaim = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/claim/', { withCredentials: true });
+      const newArr = response.data.map((raw: ReceivedClaimData) => ({
+        id: raw.id,
+        status: raw.status,
+        titleClaim: raw.title_claim,
+        textClaim: raw.text_claim,
+        publicationDate: raw.publication_date,
+        approvingDate: raw.approving_date,
+      }));
+      setClaim(newArr);
+      dispatch(setClaimAction(newArr));
+    } catch (error) {
+      console.error('Ошибка загрузки жалоб:', error);
+      toast.error('Ошибка загрузки жалоб');
+    }
   };
 
-  const getStatusColor = (status: ComplaintStatus): string => {
-    const colors = {
-      pending: 'bg-yellow-100 text-yellow-800',
-      in_review: 'bg-blue-100 text-blue-800',
+  const postClaim: SubmitHandler<FormData> = async (data) => {
+    try {
+      console.log('Отправляемые данные:', data); // Логирование данных перед отправкой
+      const response = await axios.post('http://localhost:8000/claim/post/', {
+        title_claim: data.titleClaim,
+        text_claim: data.textClaim,
+        id_user: user?.id, // Передача ID пользователя
+      }, { withCredentials: true });
+
+      console.log('Ответ от сервера:', response.data); // Логирование ответа от сервера
+
+      const addedClaim = {
+        id: response.data.id,
+        titleClaim: response.data.title_claim,
+        textClaim: response.data.text_claim,
+        publicationDate: response.data.publication_date,
+        approvingDate: response.data.approving_date,
+        status: response.data.status,
+      };
+      setClaim((prev) => [addedClaim, ...prev]);
+      toast.success('Жалоба успешно добавлена');
+      reset();
+    } catch (error) {
+      console.error('Ошибка при добавлении жалобы:', error);
+      toast.error('Ошибка при добавлении жалобы');
+    }
+  };
+
+  const getStatusColor = (status: string): string => {
+    const colors: { [key: string]: string } = {
+      registered: 'bg-yellow-100 text-yellow-800',
+      denied: 'bg-red-100 text-red-800',
+      moderating: 'bg-blue-100 text-blue-800',
       resolved: 'bg-green-100 text-green-800',
-      rejected: 'bg-red-100 text-red-800',
     };
-    return colors[status];
+    return colors[status] || '';
   };
 
-  const getStatusText = (status: ComplaintStatus): string => {
-    const texts = {
-      pending: 'На рассмотрении',
-      in_review: 'В обработке',
-      resolved: 'Решено',
-      rejected: 'Отклонено',
-    };
-    return texts[status];
-  };
+  useEffect(() => {
+    getAllClaim();
+  }, []);
 
   const UserView = () => (
     <div className="max-w-4xl mx-auto p-4 space-y-8">
+      <Header />
       {isAuth && (
         <Card>
           <CardHeader title="Отправить жалобу" subheader="Опишите вашу проблему, и мы постараемся помочь" />
           <CardContent>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit(postClaim)} className="space-y-4">
               <div>
                 <TextField
                   label="Тема жалобы"
                   variant="outlined"
                   fullWidth
-                  {...register('title', { required: 'Обязательное поле' })}
-                  error={!!errors.title}
-                  helperText={errors.title?.message}
+                  {...register('titleClaim', { required: 'Обязательное поле' })}
+                  error={!!errors.titleClaim}
+                  helperText={errors.titleClaim?.message}
                 />
               </div>
               <div>
@@ -105,9 +131,9 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
                   fullWidth
                   multiline
                   rows={4}
-                  {...register('description', { required: 'Обязательное поле' })}
-                  error={!!errors.description}
-                  helperText={errors.description?.message}
+                  {...register('textClaim', { required: 'Обязательное поле' })}
+                  error={!!errors.textClaim}
+                  helperText={errors.textClaim?.message}
                 />
               </div>
               <Button type="submit" variant="contained" fullWidth>
@@ -118,20 +144,21 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
         </Card>
       )}
       <div className="space-y-4">
-        <Typography variant="h5">Ваши жалобы</Typography>
-        {complaints.map((complaint) => (
-          <Card key={complaint.id} className="w-full">
+        <Typography variant="h5">Жалобы</Typography>
+        {currentClaim.map((claim: ClaimData) => (
+          <Card key={claim.id} className="w-full">
             <CardHeader
-              title={complaint.title}
-              subheader={new Date(complaint.createdAt).toLocaleDateString()}
+              title={claim.titleClaim}
+              subheader={`Дата публикации: ${new Date(claim.publicationDate).toLocaleDateString()}`}
               action={
-                <Badge className={getStatusColor(complaint.status)}>
-                  {getStatusText(complaint.status)}
+                <Badge className={getStatusColor(claim.status)}>
+                  {claim.status}
                 </Badge>
               }
             />
             <CardContent>
-              <Typography variant="body2">{complaint.description}</Typography>
+              <Typography variant="body2">{claim.textClaim}</Typography>
+              <Typography variant="body2">Дата утверждения: {new Date(claim.approvingDate).toLocaleDateString()}</Typography>
             </CardContent>
           </Card>
         ))}

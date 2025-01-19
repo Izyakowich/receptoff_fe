@@ -152,7 +152,7 @@ function App() {
           </Route>
           {!isAuth && <Route path='/registration/' element={<RegistrationPage />} />}
           {!isAuth && <Route path='/login/' element={<LoginPage />} />}
-          {!isAuth && <Route path="/claim/" element={<AddClaimPage isAuth={isAuth} user={user} />} />}
+          {<Route path="/claim/" element={<AddClaimPage isAuth={isAuth} user={user} />} />}
 
           {isAuth && !user.isSuperuser && <Route path='/applications/' element={<ApplicationsListPage />} />}
           {isAuth && <Route path="/applications/">
