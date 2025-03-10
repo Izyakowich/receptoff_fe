@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
-import { Button, TextField, Card, CardContent, CardHeader, Typography, Badge } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Button, Card, CardContent, CardHeader, Typography, Badge, TextField, Select, MenuItem } from '@mui/material';
 import { toast } from 'sonner';
+import axios from 'axios';
 import { z } from 'zod';
 import './AdminClaimPage.module.scss';
+import Header from 'components/Header';
 
-// Define types using zod
+// Определение типов с использованием zod
 const ComplaintStatus = z.enum(['pending', 'in_review', 'resolved', 'rejected']);
 const Complaint = z.object({
   id: z.string(),
@@ -19,29 +21,60 @@ const Complaint = z.object({
 type ComplaintStatus = z.infer<typeof ComplaintStatus>;
 type Complaint = z.infer<typeof Complaint>;
 
-// Mock complaints data
-const mockComplaints: Complaint[] = [
-  {
-    id: '1',
-    title: 'Service Issue',
-    description: 'Having problems with...',
-    status: 'pending',
-    createdAt: '2024-02-20T10:00:00Z',
-    userId: 'user1',
-  },
-  {
-    id: '2',
-    title: 'Billing Problem',
-    description: 'Incorrect charges on...',
-    status: 'in_review',
-    createdAt: '2024-02-21T10:00:00Z',
-    userId: 'user2',
-  },
-];
-
 const AdminClaimPage = () => {
-  const [complaints, setComplaints] = useState<Complaint[]>(mockComplaints);
+  const [complaints, setComplaints] = useState<Complaint[]>([]);
 
+  // Загрузка жалоб с бэкенда
+  const fetchComplaints = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/claim/', { withCredentials: true });
+      const data = response.data.map((claim: any) => ({
+        id: claim.id,
+        title: claim.title_claim,
+        description: claim.text_claim,
+        status: claim.status === 'Проверяется' ? 'pending' : claim.status === 'Рассмотрено' ? 'resolved' : 'rejected',
+        createdAt: claim.publication_date,
+        userId: claim.id_user,
+        moderatorNotes: claim.admin_text_claim || '', // Используем admin_text_claim
+      }));
+      setComplaints(data);
+    } catch (error) {
+      console.error('Ошибка загрузки жалоб:', error);
+      toast.error('Ошибка загрузки жалоб');
+    }
+  };
+
+  useEffect(() => {
+    fetchComplaints();
+  }, []);
+
+  // Обновление статуса жалобы и комментария администратора
+  const updateComplaintStatus = async (id: string, status: ComplaintStatus, notes?: string) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8000/claim/${id}/adminput/`,
+        {
+          status: status === 'resolved' ? 'Рассмотрено' : 'Удалено',
+          admin_text_claim: notes, // Отправляем комментарий администратора
+        },
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        setComplaints((prev) =>
+          prev.map((complaint) =>
+            complaint.id === id ? { ...complaint, status, moderatorNotes: notes || '' } : complaint
+          )
+        );
+        toast.success('Статус жалобы обновлен');
+      }
+    } catch (error) {
+      console.error('Ошибка обновления статуса:', error);
+      toast.error('Ошибка обновления статуса');
+    }
+  };
+
+  // Цвета для статусов
   const getStatusColor = (status: ComplaintStatus): string => {
     const colors = {
       pending: 'bg-yellow-100 text-yellow-800',
@@ -52,6 +85,7 @@ const AdminClaimPage = () => {
     return colors[status];
   };
 
+  // Тексты для статусов
   const getStatusText = (status: ComplaintStatus): string => {
     const texts = {
       pending: 'На рассмотрении',
@@ -63,7 +97,8 @@ const AdminClaimPage = () => {
   };
 
   return (
-    <div className="admin-claim-page max-w-4xl mx-auto p-4 space-y-8">
+    <div className="admin-claim-page max-w-4xl mx-auto p-4 space-y-8" style={{ marginTop: '64px' }}>
+      <Header />
       <Card>
         <CardHeader title="Панель администратора" subheader="Управление жалобами пользователей" />
       </Card>
@@ -72,27 +107,23 @@ const AdminClaimPage = () => {
           <Card key={complaint.id}>
             <CardHeader
               title={complaint.title}
-              subheader={`ID: ${complaint.userId} | ${new Date(complaint.createdAt).toLocaleDateString()}`}
+              subheader={`ID пользователя: ${complaint.userId} | Дата создания: ${new Date(
+                complaint.createdAt
+              ).toLocaleDateString()}`}
               action={
                 <div className="space-x-2">
-                  <select
-                    className="border rounded p-1"
+                  <Select
                     value={complaint.status}
                     onChange={(e) => {
                       const newStatus = e.target.value as ComplaintStatus;
-                      setComplaints(prev =>
-                        prev.map(c =>
-                          c.id === complaint.id ? { ...c, status: newStatus } : c
-                        )
-                      );
-                      toast.success('Статус обновлен');
+                      updateComplaintStatus(complaint.id, newStatus, complaint.moderatorNotes);
                     }}
                   >
-                    <option value="pending">На рассмотрении</option>
-                    <option value="in_review">В обработке</option>
-                    <option value="resolved">Решено</option>
-                    <option value="rejected">Отклонено</option>
-                  </select>
+                    <MenuItem value="pending">На рассмотрении</MenuItem>
+                    <MenuItem value="in_review">В обработке</MenuItem>
+                    <MenuItem value="resolved">Решено</MenuItem>
+                    <MenuItem value="rejected">Отклонено</MenuItem>
+                  </Select>
                   <Badge className={getStatusColor(complaint.status)}>
                     {getStatusText(complaint.status)}
                   </Badge>
@@ -100,19 +131,22 @@ const AdminClaimPage = () => {
               }
             />
             <CardContent>
-              <Typography variant="body2" className="mb-4">{complaint.description}</Typography>
+              <Typography variant="body2" className="mb-4">
+                {complaint.description}
+              </Typography>
               <TextField
-                label="Заметки администратора"
+                label="Ответ администратора"
                 variant="outlined"
                 fullWidth
                 value={complaint.moderatorNotes || ''}
                 onChange={(e) => {
-                  setComplaints(prev =>
-                    prev.map(c =>
+                  setComplaints((prev) =>
+                    prev.map((c) =>
                       c.id === complaint.id ? { ...c, moderatorNotes: e.target.value } : c
                     )
                   );
                 }}
+                onBlur={() => updateComplaintStatus(complaint.id, complaint.status, complaint.moderatorNotes)}
               />
             </CardContent>
           </Card>

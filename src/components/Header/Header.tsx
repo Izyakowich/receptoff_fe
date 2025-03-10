@@ -80,9 +80,9 @@ const Header: React.FC = () => {
                     {isUserAuth && !user.isSuperuser ? 
                     <Link className={styles.header__block} to='/applications/'>Мои заявки</Link>
                     : isUserAuth && <Link className={styles.header__block} to='/applications/'>Заявки</Link>}
-                    {<Link className={styles.header__block} to={'/claim/'}>Жалобы</Link>}
+                    {isUserAuth && !user.isSuperuser && <Link className={styles.header__block} to={'/claim/'}>Жалобы</Link>}
 
-                    {/* {!user.isSuperuser &&  <Link className={styles.header__block} to='/'>Поддержка</Link>} */}
+                    {user.isSuperuser &&  <Link className={styles.header__block} to='/claim/admin/'>Жалобы</Link>}
                 </div>
 
                 <div className={styles.header__icons}>
@@ -107,7 +107,7 @@ const Header: React.FC = () => {
                         <Link className={styles['burger__menu-item']} to={'/products/'}>Все блюда</Link>
                         <Link className={styles['burger__menu-item']} to={'/admin/'}>Управление</Link>
                         <Link className={styles['burger__menu-item']} to={'/applications/'}>Заявки</Link>
-                        <Link className={styles['burger__menu-item']} to={'/claim/'}>Жалобы</Link>
+                        <Link className={styles['burger__menu-item']} to={'/claim/admin/'}>Жалобы</Link>
                     </div>
                     }
                 </div>

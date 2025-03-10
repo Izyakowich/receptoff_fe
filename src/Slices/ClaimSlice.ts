@@ -6,6 +6,7 @@ interface ClaimData {
   titleClaim: string;
   status: string;
   textClaim: string;
+  adminTextClaim: String;
   publicationDate : string;
   approvingDate : string;
 }

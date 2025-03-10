@@ -13,8 +13,9 @@ type ClaimData = {
   id: number;
   titleClaim: string;
   textClaim: string;
+  adminTextClaim: string | null; // Новое поле
   publicationDate: string;
-  approvingDate: string;
+  approvingDate: string | null;
   status: string;
 };
 
@@ -22,8 +23,9 @@ export type ReceivedClaimData = {
   id: number;
   title_claim: string;
   text_claim: string;
+  admin_text_claim: string | null; // Новое поле
   publication_date: string;
-  approving_date: string;
+  approving_date: string | null;
   status: string;
 };
 
@@ -38,6 +40,7 @@ interface AddClaimPageProps {
 interface FormData {
   titleClaim: string;
   textClaim: string;
+  adminTextClaim?: string; // Новое поле
 }
 
 const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
@@ -53,6 +56,7 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
         status: raw.status,
         titleClaim: raw.title_claim,
         textClaim: raw.text_claim,
+        adminTextClaim: raw.admin_text_claim || null, // Новое поле
         publicationDate: raw.publication_date,
         approvingDate: raw.approving_date,
       }));
@@ -66,19 +70,25 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
 
   const postClaim: SubmitHandler<FormData> = async (data) => {
     try {
-      console.log('Отправляемые данные:', data); // Логирование данных перед отправкой
-      const response = await axios.post('http://localhost:8000/claim/post/', {
-        title_claim: data.titleClaim,
-        text_claim: data.textClaim,
-        id_user: user?.id, // Передача ID пользователя
-      }, { withCredentials: true });
+      console.log('Отправляемые данные:', data);
+      const response = await axios.post(
+        'http://localhost:8000/claim/post/',
+        {
+          title_claim: data.titleClaim,
+          text_claim: data.textClaim,
+          admin_text_claim: data.adminTextClaim || null, // Новое поле
+          id_user: user?.id,
+        },
+        { withCredentials: true }
+      );
 
-      console.log('Ответ от сервера:', response.data); // Логирование ответа от сервера
+      console.log('Ответ от сервера:', response.data);
 
       const addedClaim = {
         id: response.data.id,
         titleClaim: response.data.title_claim,
         textClaim: response.data.text_claim,
+        adminTextClaim: response.data.admin_text_claim || null, // Новое поле
         publicationDate: response.data.publication_date,
         approvingDate: response.data.approving_date,
         status: response.data.status,
@@ -136,6 +146,18 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
                   helperText={errors.textClaim?.message}
                 />
               </div>
+              {isAuth && user.isSuperuser && ( // Поле для комментария администратора
+                <div>
+                  <TextField
+                    label="Комментарий администратора"
+                    variant="outlined"
+                    fullWidth
+                    multiline
+                    rows={2}
+                    {...register('adminTextClaim')}
+                  />
+                </div>
+              )}
               <Button type="submit" variant="contained" fullWidth>
                 Отправить
               </Button>
@@ -149,7 +171,7 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
           <Card key={claim.id} className="w-full">
             <CardHeader
               title={claim.titleClaim}
-              subheader={`Дата публикации: ${new Date(claim.publicationDate).toLocaleDateString()}`}
+              subheader={claim.textClaim}
               action={
                 <Badge className={getStatusColor(claim.status)}>
                   {claim.status}
@@ -157,8 +179,19 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
               }
             />
             <CardContent>
-              <Typography variant="body2">{claim.textClaim}</Typography>
-              <Typography variant="body2">Дата утверждения: {new Date(claim.approvingDate).toLocaleDateString()}</Typography>
+              <Typography variant="body2">
+                Дата публикации: {new Date(claim.publicationDate).toLocaleDateString()}
+              </Typography>
+              {claim.approvingDate && (
+                <Typography variant="body2">
+                  Дата утверждения: {new Date(claim.approvingDate).toLocaleDateString()}
+                </Typography>
+              )}
+              {claim.adminTextClaim && ( // Новый блок для комментария администратора
+                <Typography variant="body2" className="mt-4">
+                  <strong>Комментарий администратора:</strong> {claim.adminTextClaim}
+                </Typography>
+              )}
             </CardContent>
           </Card>
         ))}

@@ -158,8 +158,8 @@ const ProductsPage: React.FC = () => {
         }
     }
 
+    dispatch(setIsProductsLoadingAction(true))
     const handleSearchButtonClick = () => {
-        dispatch(setIsProductsLoadingAction(true))
         getProducts();
     }
 

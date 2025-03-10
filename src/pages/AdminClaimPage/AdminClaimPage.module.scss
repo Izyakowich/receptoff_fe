@@ -1,83 +1,103 @@
+.admin-claim-page {
+  margin-top: 64px; /* Отступ сверху, равный высоте Header */
+  padding: 16px; /* Добавьте отступы для содержимого */
+}
 
 .complaint-page {
-    @apply min-h-screen bg-background py-8;
-    .card {
-      @apply bg-card text-card-foreground shadow-sm transition-shadow duration-200;
-      
-      &:hover {
-        @apply shadow-md;
-      }
+  @apply min-h-screen bg-background py-8;
+
+  .card {
+    @apply bg-card text-card-foreground shadow-sm transition-shadow duration-200;
+
+    &:hover {
+      @apply shadow-md;
     }
-    .status-badge {
-      &.pending {
-        @apply bg-yellow-100 text-yellow-800;
-      }
-      &.in_review {
-        @apply bg-blue-100 text-blue-800;
-      }
-      &.resolved {
-        @apply bg-green-100 text-green-800;
-      }
-      &.rejected {
-        @apply bg-red-100 text-red-800;
-      }
+  }
+
+  .status-badge {
+    &.pending {
+      @apply bg-yellow-100 text-yellow-800;
     }
-    .complaint-form {
-      @apply space-y-4;
-      .form-group {
-        @apply space-y-2;
-      }
-      .error-message {
-        @apply text-sm text-destructive mt-1;
-      }
-      textarea {
-        @apply min-h-[150px] resize-none;
-      }
+    &.in_review {
+      @apply bg-blue-100 text-blue-800;
     }
-    .complaints-list {
-      @apply space-y-4 mt-8;
-      .complaint-item {
-        @apply border rounded-lg p-4;
-        .complaint-header {
-          @apply flex justify-between items-start mb-4;
-        }
-        .complaint-title {
-          @apply text-lg font-semibold;
-        }
-        .complaint-date {
-          @apply text-sm text-muted-foreground;
-        }
-        .complaint-description {
-          @apply text-foreground;
-        }
-      }
+    &.resolved {
+      @apply bg-green-100 text-green-800;
     }
-    .moderator-panel {
-      .status-select {
-        @apply border rounded p-2 bg-background text-foreground;
-      }
-      .moderator-notes {
-        @apply mt-4;
-      }
+    &.rejected {
+      @apply bg-red-100 text-red-800;
     }
-    // Dark mode adjustments
-    .dark & {
-      .card {
-        @apply bg-card border-border;
+  }
+
+  .complaint-form {
+    @apply space-y-4;
+
+    .form-group {
+      @apply space-y-2;
+    }
+
+    .error-message {
+      @apply text-sm text-destructive mt-1;
+    }
+
+    textarea {
+      @apply min-h-[150px] resize-none;
+    }
+  }
+
+  .complaints-list {
+    @apply space-y-4 mt-8;
+
+    .complaint-item {
+      @apply border rounded-lg p-4;
+
+      .complaint-header {
+        @apply flex justify-between items-start mb-4;
       }
-      .status-badge {
-        &.pending {
-          @apply bg-yellow-900 text-yellow-100;
-        }
-        &.in_review {
-          @apply bg-blue-900 text-blue-100;
-        }
-        &.resolved {
-          @apply bg-green-900 text-green-100;
-        }
-        &.rejected {
-          @apply bg-red-900 text-red-100;
-        }
+
+      .complaint-title {
+        @apply text-lg font-semibold;
+      }
+
+      .complaint-date {
+        @apply text-sm text-muted-foreground;
+      }
+
+      .complaint-description {
+        @apply text-foreground;
       }
     }
   }
+
+  .moderator-panel {
+    .status-select {
+      @apply border rounded p-2 bg-background text-foreground;
+    }
+
+    .moderator-notes {
+      @apply mt-4;
+    }
+  }
+
+  // Dark mode adjustments
+  .dark & {
+    .card {
+      @apply bg-card border-border;
+    }
+
+    .status-badge {
+      &.pending {
+        @apply bg-yellow-900 text-yellow-100;
+      }
+      &.in_review {
+        @apply bg-blue-900 text-blue-100;
+      }
+      &.resolved {
+        @apply bg-green-900 text-green-100;
+      }
+      &.rejected {
+        @apply bg-red-900 text-red-100;
+      }
+    }
+  }
+}
