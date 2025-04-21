@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { useSelector } from "react-redux";
+import { RootState } from './Store';
 
 interface ProductData {
   id: number,
@@ -17,25 +18,31 @@ export type ReceivedProductData = {
   status: string,
   photo: string,
 }
+
+interface LinksMapType {
+  [key: string]: string;
+}
+
 interface DataState {
   product: ProductData,
-  LinksMapData: Map<string, string>
+  LinksMapData: LinksMapType
 }
+
+const initialState: DataState = {
+  product: {} as ProductData,
+  LinksMapData: { 'Блюда': '/products' }
+};
 
 const dataSlice = createSlice({
   name: "data",
-  initialState: {
-    product: {},
-    LinksMapData: new Map<string, string>([['блюда', '/']])
-  } as DataState,
+  initialState,
   reducers: {
     setProduct(state, action: PayloadAction<ProductData>) {
-        state.product = action.payload
+      state.product = action.payload;
     },
-    setLinksMapData(state, action: PayloadAction<Map<string, string>>) {
-      console.log(action.payload)
-      state.LinksMapData = action.payload
-  },
+    setLinksMapData: (state, action: PayloadAction<Map<string, string>>) => {
+      state.LinksMapData = Object.fromEntries(action.payload);
+    },
   },
 });
 
@@ -43,11 +50,13 @@ export const useProduct = () =>
   useSelector((state: { detailedData: DataState }) => state.detailedData.product);
 
 export const useLinksMapData = () =>
-  useSelector((state: { detailedData: DataState }) => state.detailedData.LinksMapData);
+  useSelector((state: { detailedData: DataState }) => 
+    new Map(Object.entries(state.detailedData.LinksMapData))
+  );
 
 export const {
-    setProduct: setProductAction,
-    setLinksMapData: setLinksMapDataAction
+  setProduct: setProductAction,
+  setLinksMapData: setLinksMapDataAction
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

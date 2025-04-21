@@ -1,91 +1,3 @@
-// import * as React from 'react';
-// // import Button from 'react-bootstrap/Button';
-// import Header from 'components/Header';
-// import BreadCrumbs from 'components/BreadCrumbs';
-// import Image from "react-bootstrap/Image"
-// import styles from './DetaliedPage.module.scss'
-// import { useEffect } from 'react';
-// import { useParams } from 'react-router-dom';
-// import { mockProducts } from '../../../consts'
-// import {useDispatch} from "react-redux";
-// import { useProduct, useLinksMapData, setProductAction, setLinksMapDataAction } from "../../Slices/DetailedSlice"
-// import axios from 'axios';
-
-// export type ReceivedProductData = {
-//     id: number,
-//     product_name: string,
-//     product_info: string,
-//     price: number,
-//     status: string,
-//     photo: string,
-// }
-
-// const DetailedPage: React.FC = () => {
-//     const dispatch = useDispatch();
-//     const product = useProduct();
-//     const linksMap = useLinksMapData();
-
-//     const params = useParams();
-//     const id = params.id === undefined ? '' : params.id;
-
-//     const getProduct = async () => {
-//         try {
-//             const response = await axios.get(`http://127.0.0.1:8000/products/${id}/`);
-//             const jsonData = response.data;
-//             dispatch(setProductAction({
-//                 id: Number(jsonData.id),
-//                 title: jsonData.product_name,
-//                 price: jsonData.price,
-//                 info: jsonData.product_info,
-//                 src: jsonData.photo
-//             }))
-
-//             const newLinksMap = new Map<string, string>(linksMap); // Копирование старого Map
-//             newLinksMap.set(jsonData.title, '/products/' + id + '/');
-//             dispatch(setLinksMapDataAction(newLinksMap))
-//         } catch {
-//             const sub = mockProducts.find(item => item.id === Number(id));
-//             if (sub) {
-//                 dispatch(setProductAction(sub))
-//             }
-//         }
-//     };
-//     useEffect(() => {
-//         getProduct();
-
-//         return () => { // Возможно лучше обобщить для всех страниц в отдельный Slice !!!
-//             dispatch(setLinksMapDataAction(new Map<string, string>([['Блюда', '/products']])))
-//         }
-//     }, []);
-
-//     return (
-//         <div className='detailed__page'>
-//             <Header/>
-//             <div className={styles['detailed__page-wrapper']} style={{paddingTop: "90px"}}>
-//                 <BreadCrumbs/>
-                
-//                 <div className={styles['detailed__page-container']}>
-//                     <Image
-//                         className={styles['detailed__page-image']}
-//                         src={product?.src ? product?.src : "https://www.solaredge.com/us/sites/nam/files/Placeholders/Placeholder-4-3.jpg"}
-//                         rounded
-//                     />
-//                     <div className={styles['detailed__page-info']}>
-//                         <h4 className={styles['detailed__page-article']}>Цена на данное блюдо:  <strong>{product?.price}р.</strong></h4>
-//                         <div className={styles['detailed__page-description']}>
-//                             <h4 className={styles['detailed__page-article']}>Описание:</h4>
-//                             <p>{product?.info}</p>
-//                         </div>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     )
-// };
-  
-// export default DetailedPage;
-
-
 import * as React from 'react';
 import Header from 'components/Header';
 import BreadCrumbs from 'components/BreadCrumbs';
@@ -152,36 +64,72 @@ const DetailedPage: React.FC = () => {
 
     const getProduct = async () => {
         try {
+            console.log('🔍 Fetching product data for ID:', id);
             const response = await axios.get(`http://127.0.0.1:8000/products/${id}/`);
             const jsonData = response.data;
+            console.log('✅ Received product data:', {
+                id: jsonData.id,
+                name: jsonData.product_name,
+                price: jsonData.price
+            });
+            
             setCurrentImage(jsonData.photo);
-            dispatch(setProductAction({
+            
+            const productData = {
                 id: Number(jsonData.id),
                 title: jsonData.product_name,
                 price: jsonData.price,
                 info: jsonData.product_info,
                 src: jsonData.photo
-            }))
+            };
+            console.log('📦 Dispatching product data:', productData);
+            dispatch(setProductAction(productData));
 
-            const newLinksMap = new Map<string, string>(linksMap);
-            newLinksMap.set(jsonData.product_name, '/products/' + id + '/');
-            dispatch(setLinksMapDataAction(newLinksMap))
-        } catch {
+            // Обновляем linksMap, сохраняя базовую структуру
+            const newLinksMap = new Map<string, string>([
+                ['Блюда', '/products'],
+                [id.toString(), jsonData.product_name]
+            ]);
+            console.log('🗺 Setting linksMap:', Object.fromEntries(newLinksMap));
+            dispatch(setLinksMapDataAction(newLinksMap));
+
+        } catch (error) {
+            console.log('❌ Error fetching product:', error);
             const sub = mockProducts.find(item => item.id === Number(id));
             if (sub) {
+                console.log('📝 Using mock data:', sub);
                 setCurrentImage(sub.src);
-                dispatch(setProductAction(sub))
+                dispatch(setProductAction(sub));
+                
+                // Обновляем linksMap для моковых данных
+                const newLinksMap = new Map<string, string>([
+                    ['Блюда', '/products'],
+                    [id.toString(), sub.title]
+                ]);
+                console.log('🗺 Setting linksMap (mock):', Object.fromEntries(newLinksMap));
+                dispatch(setLinksMapDataAction(newLinksMap));
             }
         }
     };
 
     useEffect(() => {
+        console.log('🚀 Component mounted, fetching data for ID:', id);
         getProduct();
 
         return () => {
-            dispatch(setLinksMapDataAction(new Map<string, string>([['Блюда', '/products']])))
+            console.log('👋 Component unmounting, resetting linksMap');
+            dispatch(setLinksMapDataAction(new Map<string, string>([['Блюда', '/products']])));
         }
     }, [id]);
+
+    useEffect(() => {
+        if (id) {
+            dispatch(setLinksMapDataAction(new Map<string, string>([
+                ['Блюда', '/products'],
+                [product.title, `/products/${id}`]
+            ])));
+        }
+    }, [id, product.title]);
 
     return (
         <div className='detailed__page'>
@@ -212,6 +160,7 @@ const DetailedPage: React.FC = () => {
                     </div>
                     
                     <div className={styles['detailed__page-info']}>
+                        <h2 className={styles['detailed__page-title']}>{product?.title}</h2>
                         <h4 className={styles['detailed__page-article']}>
                             Цена на данное блюдо: <strong>{product?.price}р.</strong>
                         </h4>

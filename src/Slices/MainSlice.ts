@@ -16,7 +16,7 @@ interface DataState {
   priceValues: number[];
   isMainPage: boolean;
   isProductsLoading: boolean;
-
+  currentPage: number;
 }
 
 const dataSlice = createSlice({
@@ -27,7 +27,7 @@ const dataSlice = createSlice({
     priceValues: [0, 10000],
     isMainPage: false,
     isProductsLoading: false,
-
+    currentPage: 1
   } as DataState,
   reducers: {
   
@@ -47,6 +47,9 @@ const dataSlice = createSlice({
     },
     setIsProductsLoading(state, action: PayloadAction<boolean>) {
       state.isProductsLoading = action.payload
+    },
+    setCurrentPage(state, action: PayloadAction<number>) {
+      state.currentPage = action.payload;
     },
   },
 });
@@ -68,6 +71,9 @@ export const useIsMainPage = () =>
 export const useIsProductsLoading = () =>
   useSelector((state: { mainData: DataState }) => state.mainData.isProductsLoading);
 
+export const useCurrentPage = () =>
+  useSelector((state: { mainData: DataState }) => state.mainData.currentPage);
+
 
 export const {
   
@@ -77,6 +83,7 @@ export const {
     setPriceValues: setPriceValuesAction,
     setIsMainPage: setIsMainPageAction,
     setIsProductsLoading: setIsProductsLoadingAction,
+    setCurrentPage: setCurrentPageAction,
 
 } = dataSlice.actions;
 
