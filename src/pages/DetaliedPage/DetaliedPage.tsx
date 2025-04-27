@@ -11,7 +11,7 @@ import { useProduct, useLinksMapData, setProductAction, setLinksMapDataAction } 
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
-import { useIsAuth } from 'Slices/AuthSlice';
+import { useIsAuth, useUser } from 'Slices/AuthSlice';
 import { useProductsFromApplication, setProductsFromApplicationAction, useCurrentApplicationId, setCurrentApplicationIdAction } from 'Slices/ApplicationsSlice';
 import ApplicationIcon from 'components/Icons/ApplicationIcon';
 
@@ -29,6 +29,7 @@ const DetailedPage: React.FC = () => {
     const product = useProduct();
     const linksMap = useLinksMapData();
     const isUserAuth = useIsAuth();
+    const user = useUser();
     const productsFromApplication = useProductsFromApplication();
     const currentApplicationId = useCurrentApplicationId();
     const params = useParams();
@@ -196,7 +197,7 @@ const DetailedPage: React.FC = () => {
                                 fluid
                             />
                         </div>
-                        {isUserAuth && (
+                        {user.isSuperuser && (
                             <Button 
                                 variant="outline-secondary"
                                 onClick={handleGenerateImage}
