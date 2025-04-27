@@ -25,6 +25,7 @@ import AddProductPage from 'pages/AddProductPage';
 import EditProductPage from 'pages/EditProductPage';
 import AddClaimPage from 'pages/AddClaimPage';
 import AdminClaimPage from 'pages/AdminClaimPage';
+import AccountPage from 'pages/AccountPage/AccountPage';
 
 const cookies = new Cookies();
 
@@ -158,6 +159,8 @@ function App() {
           {isAuth && <Route path="/applications/">
             <Route path=":id/" element={<SelectedApplicationPage />} />
           </Route>}
+
+          <Route path="/account" element={<AccountPage />} />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

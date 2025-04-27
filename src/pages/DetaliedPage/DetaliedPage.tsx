@@ -4,7 +4,7 @@ import BreadCrumbs from 'components/BreadCrumbs';
 import Image from "react-bootstrap/Image"
 import styles from './DetaliedPage.module.scss'
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { mockProducts } from '../../../consts'
 import {useDispatch} from "react-redux";
 import { useProduct, useLinksMapData, setProductAction, setLinksMapDataAction } from "../../Slices/DetailedSlice"
@@ -12,6 +12,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import { useIsAuth } from 'Slices/AuthSlice';
+import { useProductsFromApplication, setProductsFromApplicationAction, useCurrentApplicationId, setCurrentApplicationIdAction } from 'Slices/ApplicationsSlice';
+import ApplicationIcon from 'components/Icons/ApplicationIcon';
 
 export type ReceivedProductData = {
     id: number,
@@ -27,10 +29,13 @@ const DetailedPage: React.FC = () => {
     const product = useProduct();
     const linksMap = useLinksMapData();
     const isUserAuth = useIsAuth();
+    const productsFromApplication = useProductsFromApplication();
+    const currentApplicationId = useCurrentApplicationId();
     const params = useParams();
     const id = params.id === undefined ? '' : params.id;
     const [isGenerating, setIsGenerating] = useState(false);
     const [currentImage, setCurrentImage] = useState<string | undefined>();
+    const navigate = useNavigate();
 
     const handleGenerateImage = async () => {
         if (!isUserAuth) {
@@ -59,6 +64,43 @@ const DetailedPage: React.FC = () => {
             console.error('Generation error:', error);
         } finally {
             setIsGenerating(false);
+        }
+    };
+
+    const handleAddToCart = async () => {
+        if (!isUserAuth) {
+            toast.info('Авторизуйтесь для добавления в корзину');
+            return;
+        }
+        try {
+            const response = await axios.post(
+                `http://localhost:8000/products/${product.id}/post/`,
+                {},
+                { withCredentials: true }
+            );
+            const addedProduct = {
+                id: response.data.id,
+                title: response.data.product_name,
+                price: response.data.price,
+                info: response.data.product_info,
+                src: response.data.photo
+            };
+            // Обновить applicationId, если пришёл новый
+            if (response.data.application_id) {
+                dispatch(setCurrentApplicationIdAction(response.data.application_id));
+            }
+            dispatch(setProductsFromApplicationAction([...productsFromApplication, addedProduct]));
+            toast.success('Блюдо добавлено в корзину!');
+        } catch {
+            toast.error('Блюдо уже добавлено в корзину!');
+        }
+    };
+
+    const handleGoToCart = () => {
+        if (currentApplicationId !== null) {
+            navigate(`/applications/${currentApplicationId}/`, { state: { flag: false } });
+        } else {
+            toast.info('Корзина пуста');
         }
     };
 
@@ -136,7 +178,14 @@ const DetailedPage: React.FC = () => {
             <Header/>
             <div className={styles['detailed__page-wrapper']} style={{paddingTop: "90px"}}>
                 <BreadCrumbs/>
-                
+                <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24}}>
+                    <h2 className={styles['detailed__page-title']} style={{margin: 0}}>{product?.title}</h2>
+                    {isUserAuth && (
+                        <div style={{cursor: 'pointer'}}>
+                            <ApplicationIcon onClick={handleGoToCart} />
+                        </div>
+                    )}
+                </div>
                 <div className={styles['detailed__page-container']}>
                     <div className={styles['image-section']}>
                         <div className={styles['image-wrapper']}>
@@ -160,10 +209,19 @@ const DetailedPage: React.FC = () => {
                     </div>
                     
                     <div className={styles['detailed__page-info']}>
-                        <h2 className={styles['detailed__page-title']}>{product?.title}</h2>
                         <h4 className={styles['detailed__page-article']}>
                             Цена на данное блюдо: <strong>{product?.price}р.</strong>
                         </h4>
+                        {isUserAuth && (
+                            <Button 
+                                variant="primary"
+                                onClick={handleAddToCart}
+                                className={styles['add-to-cart-button']}
+                                style={{margin: '16px 0'}}
+                            >
+                                В корзину
+                            </Button>
+                        )}
                         <div className={styles['detailed__page-description']}>
                             <h4 className={styles['detailed__page-article']}>Описание:</h4>
                             <p>{product?.info || 'Описание отсутствует'}</p>

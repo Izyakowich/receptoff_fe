@@ -66,7 +66,7 @@ const AdminClaimPage = () => {
             complaint.id === id ? { ...complaint, status, moderatorNotes: notes || '' } : complaint
           )
         );
-        toast.success('Статус жалобы обновлен');
+        toast.success('Статус отзыва обновлен');
       }
     } catch (error) {
       console.error('Ошибка обновления статуса:', error);

@@ -80,15 +80,17 @@ const Header: React.FC = () => {
                     {isUserAuth && !user.isSuperuser ? 
                     <Link className={styles.header__block} to='/applications/'>Мои заявки</Link>
                     : isUserAuth && <Link className={styles.header__block} to='/applications/'>Заявки</Link>}
-                    {isUserAuth && !user.isSuperuser && <Link className={styles.header__block} to={'/claim/'}>Жалобы</Link>}
+                    {isUserAuth && !user.isSuperuser && <Link className={styles.header__block} to={'/claim/'}>Отзывы</Link>}
 
-                    {user.isSuperuser &&  <Link className={styles.header__block} to='/claim/admin/'>Жалобы</Link>}
+                    {user.isSuperuser &&  <Link className={styles.header__block} to='/claim/admin/'>Отзывы</Link>}
                 </div>
 
                 <div className={styles.header__icons}>
-                    {isUserAuth ?
-                    <div>email: {user.email} </div> : ""
-                    }
+                    {isUserAuth && (
+                        <button className={styles.header__email_btn} onClick={() => navigate('/account')}>
+                            email: {user.email}
+                        </button>
+                    )}
                     
                     {/* {isUserAuth ? <Link to='/logout'>Выйти</Link> : <Link to='/login' className={styles.header__profile}>Войти</Link>} */}
 
@@ -100,14 +102,14 @@ const Header: React.FC = () => {
                     <div className={styles.burger__menu}>
                         <Link className={styles['burger__menu-item']} to={'/products/'}>Блюда</Link>
                         <Link className={styles['burger__menu-item']} to={'/applications/'}>Мои заявки</Link>
-                        <Link className={styles['burger__menu-item']} to={'/claim/'}>Жалобы</Link>
+                        <Link className={styles['burger__menu-item']} to={'/claim/'}>Отзывы</Link>
                     </div>}
                     {isBurgerMenuOpened && user.isSuperuser &&
                     <div className={styles.burger__menu}>
                         <Link className={styles['burger__menu-item']} to={'/products/'}>Все блюда</Link>
                         <Link className={styles['burger__menu-item']} to={'/admin/'}>Управление</Link>
                         <Link className={styles['burger__menu-item']} to={'/applications/'}>Заявки</Link>
-                        <Link className={styles['burger__menu-item']} to={'/claim/admin/'}>Жалобы</Link>
+                        <Link className={styles['burger__menu-item']} to={'/claim/admin/'}>Отзывы</Link>
                     </div>
                     }
                 </div>

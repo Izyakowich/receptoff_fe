@@ -97,8 +97,8 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
       toast.success('Жалоба успешно добавлена');
       reset();
     } catch (error) {
-      console.error('Ошибка при добавлении жалобы:', error);
-      toast.error('Ошибка при добавлении жалобы');
+      console.error('Ошибка при добавлении отзыва:', error);
+      toast.error('Ошибка при добавлении отзыва');
     }
   };
 
@@ -121,12 +121,12 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
       <Header />
       {isAuth && (
         <Card>
-          <CardHeader title="Отправить жалобу" subheader="Опишите вашу проблему, и мы постараемся помочь" />
+          <CardHeader title="Оставьте отзыв" subheader="Помогите нам стать лучше" />
           <CardContent>
             <form onSubmit={handleSubmit(postClaim)} className="space-y-4">
               <div>
                 <TextField
-                  label="Тема жалобы"
+                  label="Тема отзыва"
                   variant="outlined"
                   fullWidth
                   {...register('titleClaim', { required: 'Обязательное поле' })}
@@ -166,7 +166,7 @@ const AddClaimPage: React.FC<AddClaimPageProps> = ({ isAuth, user }) => {
         </Card>
       )}
       <div className="space-y-4">
-        <Typography variant="h5">Жалобы</Typography>
+        <Typography variant="h5">Отзывы</Typography>
         {currentClaim.map((claim: ClaimData) => (
           <Card key={claim.id} className="w-full">
             <CardHeader

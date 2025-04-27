@@ -177,16 +177,9 @@ const ProductsPage: React.FC = () => {
             <div className={styles['main__page-wrapper']}>
                 <BreadCrumbs/>
 
-                {isUserAuth && !user.isSuperuser &&
-                    <div className={styles['application__icon-wrapper']}>
-                        {isMainPage &&
-                            <ApplicationIcon onClick={() => {currentApplicationId !== null && handleClick(currentApplicationId)}}/>
-                        }
-                    </div>
-                }
                 <Form className={styles['form']} onSubmit={handleFormSubmit}>
-                    <div className={styles.form__wrapper}>
-                        <div className={styles['form__input-block']}>
+                    <div className={styles.form__wrapper} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                        <div className={styles['form__input-block']} style={{flex: 1}}>
                             <Form.Control 
                                 className={styles.form__input} 
                                 value={titleValue} 
@@ -198,10 +191,15 @@ const ProductsPage: React.FC = () => {
                                 Найти
                             </Button>
                         </div>
-                        <Button className={styles['form__mobile-button']} onClick={handleSearchButtonClick}>
-                            Найти
-                        </Button>
+                        {isUserAuth && !user.isSuperuser && isMainPage && (
+                            <div style={{marginLeft: 24}}>
+                                <ApplicationIcon onClick={() => {currentApplicationId !== null && handleClick(currentApplicationId)}}/>
+                            </div>
+                        )}
                     </div>
+                    <Button className={styles['form__mobile-button']} onClick={handleSearchButtonClick}>
+                        Найти
+                    </Button>
                 </Form>
 
                 {isLoading ? (
