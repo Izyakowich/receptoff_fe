@@ -20,6 +20,7 @@ import {  useTitleValue, useProducts, usePriceValues,
 import { useLinksMapData, setLinksMapDataAction } from 'Slices/DetailedSlice';
 import { useProductsFromApplication, setProductsFromApplicationAction, useCurrentApplicationId, setCurrentApplicationIdAction } from 'Slices/ApplicationsSlice';
 import Pagination from '../../components/Pagination/Pagination';
+import RecommendationsCarousel, { Recommendation } from 'components/RecommendationsCarousel/RecommendationsCarousel';
 
 const ITEMS_PER_PAGE = 15;
 
@@ -56,6 +57,8 @@ const ProductsPage: React.FC = () => {
     let user = useUser();
     const isUserAuth = useIsAuth();
 
+    const [recommendations, setRecommendations] = React.useState<Recommendation[]>([]);
+
     React.useEffect(() => {
         dispatch(setLinksMapDataAction(new Map<string, string>([
             ['Блюда', '/products']
@@ -64,6 +67,16 @@ const ProductsPage: React.FC = () => {
         getProducts();
 
         dispatch(setIsMainPageAction(true))
+
+        axios.get('http://localhost:8000/recommendations/', { withCredentials: true })
+            .then(res => {
+                setRecommendations(res.data.map((item: any) => ({
+                    id: item.id,
+                    product_name: item.product_name,
+                    photo: item.photo
+                })));
+            })
+            .catch(() => setRecommendations([]));
 
         return () => {
             dispatch(setIsMainPageAction(false))
@@ -176,7 +189,9 @@ const ProductsPage: React.FC = () => {
             <Header/>
             <div className={styles['main__page-wrapper']}>
                 <BreadCrumbs/>
-
+                {isUserAuth && recommendations.length > 0 && (
+                    <RecommendationsCarousel recommendations={recommendations} />
+                )}
                 <Form className={styles['form']} onSubmit={handleFormSubmit}>
                     <div className={styles.form__wrapper} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
                         <div className={styles['form__input-block']} style={{flex: 1}}>
