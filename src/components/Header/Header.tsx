@@ -78,7 +78,7 @@ const Header: React.FC = () => {
                     <Link className={styles.header__block} to='/products/'>Все блюда</Link>
                     {isUserAuth && user.isSuperuser && <Link className={styles.header__block} to={'/products/admin/'}>Управление</Link>}
                     {isUserAuth && !user.isSuperuser ? 
-                    <Link className={styles.header__block} to='/applications/'>Мои заявки</Link>
+                    <Link className={styles.header__block} to='/applications/'>Мои заказы</Link>
                     : isUserAuth && <Link className={styles.header__block} to='/applications/'>Заявки</Link>}
                     {isUserAuth && !user.isSuperuser && <Link className={styles.header__block} to={'/claim/'}>Отзывы</Link>}
 

@@ -50,6 +50,7 @@ const AdminProductsPage = () => {
     const products = useProducts()
     const navigate = useNavigate()
     const [isProductsShow, setIsProductsShow] = useState(true)
+    const [searchValue, setSearchValue] = useState('')
 
     const getProducts = async () => {
         try {
@@ -68,6 +69,9 @@ React.useEffect(() => {
     getProducts()
   }, [])
 
+  const filteredProducts = products.filter(product =>
+    product.title.toLowerCase().includes(searchValue.toLowerCase())
+  );
 
   return (
     <div className={styles.admin__page}>
@@ -75,10 +79,19 @@ React.useEffect(() => {
         <div className={styles['admin__page-wrapper']}>
         <BreadCrumbs/>
 
-            {isProductsShow && <><h1 className={styles['admin__page-title']}>Список услуг</h1>
+            {isProductsShow && <><h1 className={styles['admin__page-title']}>Список блюд</h1>
+
+            <div style={{ maxWidth: 400, margin: '0 auto 24px auto' }}>
+                <Form.Control
+                    type="text"
+                    placeholder="Поиск по названию блюда..."
+                    value={searchValue}
+                    onChange={e => setSearchValue(e.target.value)}
+                />
+            </div>
 
             <div className={styles['admin__page-title']}>
-                <CustomTable className={styles['admin__page-table']} data={products} 
+                <CustomTable className={styles['admin__page-table']} data={filteredProducts}
                 columns={columns} flag={2} ></CustomTable>
             </div>
             </>}

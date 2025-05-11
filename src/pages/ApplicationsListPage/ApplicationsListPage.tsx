@@ -67,7 +67,7 @@ const ApplicationsListPage = () => {
             <Header/>
             <div className={styles['applications__page-wrapper']}>
                 <BreadCrumbs/>
-                <h1 className={styles['applications__page-title']}>История ваших заявок</h1>
+                <h1 className={styles['applications__page-title']}>История заказов</h1>
                 <ApplicationsTable applications={applications}/>
                 <ModalWindow handleBackdropClick={() => setIsModalWindowOpened(false)} className={styles.modal} active={isModalWindowOpened}>
                     <h3 className={styles.modal__title}>Вы зарегистрированы!</h3>

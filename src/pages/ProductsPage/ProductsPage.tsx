@@ -189,7 +189,7 @@ const ProductsPage: React.FC = () => {
             <Header/>
             <div className={styles['main__page-wrapper']}>
                 <BreadCrumbs/>
-                {isUserAuth && recommendations.length > 0 && (
+                {isUserAuth && !user.isSuperuser && recommendations.length > 0 && (
                     <RecommendationsCarousel recommendations={recommendations} />
                 )}
                 <Form className={styles['form']} onSubmit={handleFormSubmit}>

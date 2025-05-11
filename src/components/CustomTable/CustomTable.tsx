@@ -229,7 +229,7 @@ const CustomTable: React.FC<TableData> = ({columns, data, className}) => {
 
   return (
     <>
-      <span className={`${styles['table__add-text']}`}>Добавление новой услуги</span><AddButton onClick={() => handleAddButtonClick()}/>
+      <span className={`${styles['table__add-text']}`}>Добавление нового блюда</span><AddButton onClick={() => handleAddButtonClick()}/>
       <div className={`${styles.table__container} ${className}`}>
       <div className={`${styles.table__add} ${className}`}>
       </div>
